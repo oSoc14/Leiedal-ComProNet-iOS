@@ -1,0 +1,272 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs24 \cf0 [\
+  \{\
+    "id": 0,\
+    "guid": "47f19a74-6575-4f9a-8c9b-c27f823df9b8",\
+    "isActive": true,\
+    "balance": "$1,083.77",\
+    "picture": "http://placehold.it/32x32",\
+    "age": 30,\
+    "eyeColor": "green",\
+    "name": "Dejesus Gay",\
+    "gender": "male",\
+    "company": "ECLIPTO",\
+    "email": "dejesusgay@eclipto.com",\
+    "phone": "+1 (835) 596-3005",\
+    "address": "697 Bassett Avenue, Dundee, Texas, 4736",\
+    "about": "Laboris fugiat proident cupidatat cillum eiusmod officia cillum. Aute deserunt pariatur culpa irure culpa ad tempor veniam duis. Incididunt esse elit mollit ut ipsum voluptate. Deserunt occaecat proident non aliquip proident non laborum veniam nisi do. Laborum laborum ipsum id dolore labore qui commodo. Mollit exercitation laboris eiusmod officia voluptate excepteur consequat ad excepteur ea veniam proident duis.\\r\\n",\
+    "registered": "2014-02-28T17:11:01 -01:00",\
+    "latitude": -56.110924,\
+    "longitude": -102.763154,\
+    "tags": [\
+      "eiusmod",\
+      "nostrud",\
+      "ad",\
+      "laborum",\
+      "sit",\
+      "mollit",\
+      "id"\
+    ],\
+    "friends": [\
+      \{\
+        "id": 0,\
+        "name": "Alba Matthews"\
+      \},\
+      \{\
+        "id": 1,\
+        "name": "York Dixon"\
+      \},\
+      \{\
+        "id": 2,\
+        "name": "Frazier Glover"\
+      \}\
+    ],\
+    "greeting": "Hello, Dejesus Gay! You have 7 unread messages.",\
+    "favoriteFruit": "banana"\
+  \},\
+  \{\
+    "id": 1,\
+    "guid": "ef02101b-2734-44ca-8e40-abc03b36dd2e",\
+    "isActive": false,\
+    "balance": "$3,642.34",\
+    "picture": "http://placehold.it/32x32",\
+    "age": 27,\
+    "eyeColor": "green",\
+    "name": "Jenkins Harvey",\
+    "gender": "male",\
+    "company": "EXOSWITCH",\
+    "email": "jenkinsharvey@exoswitch.com",\
+    "phone": "+1 (839) 529-2356",\
+    "address": "607 Brightwater Avenue, Cascades, Missouri, 2713",\
+    "about": "Non cillum ut labore occaecat ipsum officia tempor commodo excepteur minim dolore id ipsum id. Ut nisi in dolor aliqua Lorem nulla magna irure ex eiusmod est proident dolor fugiat. Quis occaecat amet officia labore dolor voluptate tempor. Consectetur exercitation et sint veniam. Esse quis voluptate quis ea. Non esse proident non sit eiusmod dolor aute et eiusmod cillum est ipsum incididunt irure. Sit veniam elit qui nulla fugiat cillum cupidatat labore labore occaecat id esse amet sint.\\r\\n",\
+    "registered": "2014-01-17T19:41:04 -01:00",\
+    "latitude": 61.499284,\
+    "longitude": 61.008307,\
+    "tags": [\
+      "enim",\
+      "amet",\
+      "aliquip",\
+      "ut",\
+      "exercitation",\
+      "laborum",\
+      "duis"\
+    ],\
+    "friends": [\
+      \{\
+        "id": 0,\
+        "name": "Dunlap Decker"\
+      \},\
+      \{\
+        "id": 1,\
+        "name": "Hodge Stark"\
+      \},\
+      \{\
+        "id": 2,\
+        "name": "Hewitt Head"\
+      \}\
+    ],\
+    "greeting": "Hello, Jenkins Harvey! You have 8 unread messages.",\
+    "favoriteFruit": "banana"\
+  \},\
+  \{\
+    "id": 2,\
+    "guid": "082a1c18-b886-43e2-ba48-59be7c9d9520",\
+    "isActive": false,\
+    "balance": "$3,409.59",\
+    "picture": "http://placehold.it/32x32",\
+    "age": 35,\
+    "eyeColor": "green",\
+    "name": "Gay Watts",\
+    "gender": "female",\
+    "company": "ZYTRAC",\
+    "email": "gaywatts@zytrac.com",\
+    "phone": "+1 (909) 446-2069",\
+    "address": "199 Roosevelt Court, Maury, Idaho, 7930",\
+    "about": "Aliquip nisi ea laborum commodo. Commodo mollit Lorem commodo est enim ullamco cillum minim nostrud nisi exercitation. In anim exercitation est esse non aliquip culpa proident sint laboris. Consequat ut reprehenderit adipisicing dolore reprehenderit esse excepteur reprehenderit excepteur laborum dolore excepteur amet. In eiusmod sint id ipsum eiusmod pariatur. Adipisicing nostrud magna labore quis. Consectetur non nulla amet quis minim consectetur officia amet cupidatat nostrud velit cillum do sunt.\\r\\n",\
+    "registered": "2014-05-02T21:38:28 -02:00",\
+    "latitude": 60.3499,\
+    "longitude": 178.511144,\
+    "tags": [\
+      "et",\
+      "officia",\
+      "tempor",\
+      "reprehenderit",\
+      "nulla",\
+      "laboris",\
+      "in"\
+    ],\
+    "friends": [\
+      \{\
+        "id": 0,\
+        "name": "Schwartz Vance"\
+      \},\
+      \{\
+        "id": 1,\
+        "name": "Carr Gallagher"\
+      \},\
+      \{\
+        "id": 2,\
+        "name": "Everett Garrett"\
+      \}\
+    ],\
+    "greeting": "Hello, Gay Watts! You have 7 unread messages.",\
+    "favoriteFruit": "strawberry"\
+  \},\
+  \{\
+    "id": 3,\
+    "guid": "f5e880b1-db89-4cf3-853d-710dd271db86",\
+    "isActive": false,\
+    "balance": "$3,626.40",\
+    "picture": "http://placehold.it/32x32",\
+    "age": 26,\
+    "eyeColor": "green",\
+    "name": "Myrna Deleon",\
+    "gender": "female",\
+    "company": "GORGANIC",\
+    "email": "myrnadeleon@gorganic.com",\
+    "phone": "+1 (912) 550-2756",\
+    "address": "959 Clermont Avenue, Finzel, Kansas, 4465",\
+    "about": "Aliquip minim qui Lorem Lorem culpa ipsum aliquip irure duis adipisicing in laborum ad. Occaecat veniam mollit consequat sunt duis mollit minim aute officia. In et proident cillum ex magna nisi consectetur veniam. Ex consequat labore elit eiusmod in ullamco officia laborum consectetur veniam proident cupidatat duis. Occaecat non occaecat aliquip anim ut minim incididunt officia mollit esse reprehenderit est magna esse. Qui aliqua amet dolore ex excepteur quis laborum eu.\\r\\n",\
+    "registered": "2014-02-26T13:07:53 -01:00",\
+    "latitude": -0.583146,\
+    "longitude": -110.45088,\
+    "tags": [\
+      "elit",\
+      "quis",\
+      "exercitation",\
+      "elit",\
+      "est",\
+      "est",\
+      "incididunt"\
+    ],\
+    "friends": [\
+      \{\
+        "id": 0,\
+        "name": "Wolfe Walsh"\
+      \},\
+      \{\
+        "id": 1,\
+        "name": "Shari Trujillo"\
+      \},\
+      \{\
+        "id": 2,\
+        "name": "Byers Lyons"\
+      \}\
+    ],\
+    "greeting": "Hello, Myrna Deleon! You have 1 unread messages.",\
+    "favoriteFruit": "apple"\
+  \},\
+  \{\
+    "id": 4,\
+    "guid": "dc1a4c37-034f-4523-bc4d-3f28aca30301",\
+    "isActive": true,\
+    "balance": "$3,244.10",\
+    "picture": "http://placehold.it/32x32",\
+    "age": 35,\
+    "eyeColor": "brown",\
+    "name": "Wagner Sanchez",\
+    "gender": "male",\
+    "company": "GOGOL",\
+    "email": "wagnersanchez@gogol.com",\
+    "phone": "+1 (885) 512-3931",\
+    "address": "995 Otsego Street, Charco, Guam, 7213",\
+    "about": "Ipsum Lorem voluptate eu exercitation proident et eu mollit. Eu sit consequat ut qui consequat dolore aute quis in ut magna mollit. Nulla sint aliqua nisi duis et reprehenderit sit esse aliquip.\\r\\n",\
+    "registered": "2014-06-15T07:02:02 -02:00",\
+    "latitude": -14.059262,\
+    "longitude": -20.765681,\
+    "tags": [\
+      "est",\
+      "nostrud",\
+      "do",\
+      "deserunt",\
+      "ullamco",\
+      "do",\
+      "est"\
+    ],\
+    "friends": [\
+      \{\
+        "id": 0,\
+        "name": "Monique Mullins"\
+      \},\
+      \{\
+        "id": 1,\
+        "name": "Little Long"\
+      \},\
+      \{\
+        "id": 2,\
+        "name": "Traci Doyle"\
+      \}\
+    ],\
+    "greeting": "Hello, Wagner Sanchez! You have 8 unread messages.",\
+    "favoriteFruit": "apple"\
+  \},\
+  \{\
+    "id": 5,\
+    "guid": "4848082b-295d-4672-8c4f-6ec539fcc213",\
+    "isActive": true,\
+    "balance": "$2,715.40",\
+    "picture": "http://placehold.it/32x32",\
+    "age": 31,\
+    "eyeColor": "green",\
+    "name": "Diane Glass",\
+    "gender": "female",\
+    "company": "ISOPLEX",\
+    "email": "dianeglass@isoplex.com",\
+    "phone": "+1 (842) 507-3510",\
+    "address": "963 Applegate Court, Wheaton, Delaware, 5145",\
+    "about": "Et fugiat do sint cillum. Incididunt velit eu enim duis enim. Proident consequat consequat pariatur laboris non. Excepteur proident enim aute dolore veniam. Eu ut laborum velit aliquip irure reprehenderit. Labore anim eiusmod sit elit irure irure et sint id anim occaecat nisi.\\r\\n",\
+    "registered": "2014-03-14T22:21:33 -01:00",\
+    "latitude": -26.142963,\
+    "longitude": -6.343063,\
+    "tags": [\
+      "irure",\
+      "nulla",\
+      "non",\
+      "ut",\
+      "mollit",\
+      "incididunt",\
+      "mollit"\
+    ],\
+    "friends": [\
+      \{\
+        "id": 0,\
+        "name": "Browning Horne"\
+      \},\
+      \{\
+        "id": 1,\
+        "name": "Darcy Hickman"\
+      \},\
+      \{\
+        "id": 2,\
+        "name": "Ware Spencer"\
+      \}\
+    ],\
+    "greeting": "Hello, Diane Glass! You have 7 unread messages.",\
+    "favoriteFruit": "strawberry"\
+  \}\
+]}
