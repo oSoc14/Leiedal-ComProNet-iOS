@@ -1,0 +1,41 @@
+"app_title" = "Aandacht";
+
+"nav_incidenten" = "Incidenten";
+"nav_kaart" = "Kaart";
+"nav_profiel" = "Profiel";
+"nav_instellingen" = "Instellingen";
+
+"login_username_placeholder" = "Gebruikersnaam";
+"login_password_placeholder" = "Wachtwoord";
+"login_submit_button" = "Login";
+"login_feedback_empty" = "gelieve alle velden in te vullen";
+"login_feedback_wrong" = "gegevens komen niet overeen";
+
+"incidenten_call_button" = "bel 112";
+"incidenten_call_alert" = "Weet u zeker dat u de nooddiensten wil bellen? Misbruik is strafbaar!";
+"incidenten_filter_title" = "Incidenten";
+"incidenten_filter1" = "Actief";
+"incidenten_filter2" = "Alle";
+"incidenten_filter3" = "Mijn Incidenten";
+
+"profiel_logged_in_status" = "U bent momenteel ingelogd als";
+"profiel_edit_profile_picture" = "pas profielfoto aan";
+
+"instellingen_setting1" = "Actief";
+"instellingen_setting1_info" = "Wanneer u actief bent wordt uw locatie bijgehouden en kan u pushberichten ontvangen.";
+"instellingen_setting2" = "Geluid";
+"instellingen_setting2_info" = "Activeer/deactiveer het geluid van pushnotificaties.";
+
+"date_ago" = "geleden";
+"date_minute" = "minuut";
+"date_minutes" = "minuten";
+"date_hour" = "uur";
+"date_hours" = "uur";
+"date_yesterday" = "gisteren";
+"date_day_before_yesterday" = "eergisteren";
+"date_day" = "dag";
+"date_days" = "dagen";
+"date_week" = "week";
+"date_weeks" = "weken";
+"date_month" = "maand";
+"date_months" = "maanden";
