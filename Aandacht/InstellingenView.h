@@ -10,12 +10,13 @@
 #import "HeaderView.h"
 #import "SwitchView.h"
 
-@interface InstellingenView : UIView
+@interface InstellingenView : UIView <UIAlertViewDelegate> 
 
 @property(strong, nonatomic) HeaderView *headerV;
 @property(strong, nonatomic) SwitchView *settingActive;
 @property(strong, nonatomic) UILabel *lblActiveInfo;
-@property(strong, nonatomic) SwitchView *settingSound;
-@property(strong, nonatomic) UILabel *lblSoundInfo;
+@property(strong, nonatomic) UIButton *btnSendNotification;
+@property(strong, nonatomic) UILabel *lblSendNotification;
+@property(strong, nonatomic) UIAlertView *confirmInactive;
 
 @end

@@ -11,6 +11,7 @@
 @interface SwitchView : UIView
 
 @property(strong, nonatomic) UILabel *lblTitle;
+@property(strong, nonatomic) UISwitch *btnSwitch;
 
 - (id)initWithFrame:(CGRect)frame andTitle:(NSString*)title;
 

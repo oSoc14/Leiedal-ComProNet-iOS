@@ -8,15 +8,19 @@
 
 #import "IncidentListItemButton.h"
 #import "Constants.h"
+#import "Incident.h"
 
 @implementation IncidentListItemButton
 
 @synthesize incident = _incident;
 
+@synthesize contentWidth = _contentWidth;
 @synthesize statusIcon = _statusIcon;
 @synthesize lblAddress = _lblAddress;
 @synthesize lblDescription = _lblDescription;
 @synthesize lblTime = _lblTime;
+@synthesize btnAccept = _btnAccept;
+@synthesize btnDeny = _btnDeny;
 @synthesize arrowRight = _arrowRight;
 
 - (id)initWithFrame:(CGRect)frame andIncident:(Incident*)incident
@@ -28,36 +32,83 @@
         self.layer.borderColor = defaultDarkGrayBorder.CGColor;
         self.layer.borderWidth = 1;
         self.incident = incident;
+        self.contentWidth = incidentListItemTextWidth;
         
-        int statusIconDimension = 5;
-        if([self.incident.status isEqual:@"pending"]){
-            self.statusIcon = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"status_yellow" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(incidentListItemStatusIconLeft, 36, statusIconDimension, statusIconDimension)];
-        }else if([self.incident.status isEqual:@"active"]){
-            self.statusIcon = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"status_green" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(incidentListItemStatusIconLeft, 36, statusIconDimension, statusIconDimension)];
-        }else if([self.incident.status isEqual:@"denied"]){
-            self.statusIcon = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"status_red" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(incidentListItemStatusIconLeft, 36, statusIconDimension, statusIconDimension)];
-        }else if([self.incident.status isEqual:@"finished"]){
-            self.statusIcon = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"status_grey" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(incidentListItemStatusIconLeft, 36, statusIconDimension, statusIconDimension)];
+        if(!isUserActive){
+            self.contentWidth = incidentListItemTextWidth+50;
         }
-        [self addSubview:self.statusIcon];
         
         //ADDRESS LABEL
-        self.lblAddress = [Constants createLabel:incident.address andFrame:CGRectMake(incidentListItemTextLeft, 14, incidentListItemTextWidth, 17) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentLeft andTextColor:incidentListItemTextColor andFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
+        self.lblAddress = [Constants createLabel:incident.address andFrame:CGRectMake(incidentListItemTextLeft, 14, self.contentWidth, 17) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentLeft andTextColor:incidentListItemTextColor andFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
         [self addSubview:self.lblAddress];
         
         //DESCRIPTION LABEL
-        self.lblDescription = [Constants createLabel:incident.description andFrame:CGRectMake(incidentListItemTextLeft, 31, incidentListItemTextWidth, 15) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentLeft andTextColor:incidentListItemTextColor andFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:13]];
+        self.lblDescription = [Constants createLabel:incident.description andFrame:CGRectMake(incidentListItemTextLeft, 31, self.contentWidth, 15) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentLeft andTextColor:incidentListItemTextColor andFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:13]];
         [self addSubview:self.lblDescription];
         
         //TIME/DATE LABEL
-        self.lblTime = [Constants createLabel:[self calculateDateDifference:self.incident.timeStamp] andFrame:CGRectMake(incidentListItemTextLeft, 47, incidentListItemTextWidth, 15) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentLeft andTextColor:incidentListItemTextColor andFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:12]];
+        self.lblTime = [Constants createLabel:[self calculateDateDifference:self.incident.timeStamp] andFrame:CGRectMake(incidentListItemTextLeft, 47, self.contentWidth, 15) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentLeft andTextColor:incidentListItemTextColor andFont:[UIFont fontWithName:@"HelveticaNeue-Italic" size:12]];
         [self addSubview:self.lblTime];
         
+        if(isUserActive){
+            //TOGGLE ACCEPT
+            self.btnAccept = [[ToggleButton alloc] initWithFrame:CGRectMake(239, 28, toggleButtonDimension, toggleButtonDimension) andToggleKind:@"accept"];
+            [self.btnAccept addTarget:self action:@selector(tappedToggle:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:self.btnAccept];
+        
+            //TOGGLE DENY
+            self.btnDeny = [[ToggleButton alloc] initWithFrame:CGRectMake(267, 28, toggleButtonDimension, toggleButtonDimension) andToggleKind:@"deny"];
+            [self.btnDeny addTarget:self action:@selector(tappedToggle:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:self.btnDeny];
+        }
+        
+        //STATUS ICON
+        int statusIconDimension = 8;
+        if([self.incident.status isEqual:@"pending"]){
+            self.statusIcon = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"status_yellow" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(incidentListItemStatusIconLeft, 34, statusIconDimension, statusIconDimension)];
+        }else if([self.incident.status isEqual:@"active"]){
+            [self.btnAccept setActive];
+            self.statusIcon = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"status_green" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(incidentListItemStatusIconLeft, 34, statusIconDimension, statusIconDimension)];
+        }else if([self.incident.status isEqual:@"denied"]){
+            [self.btnDeny setActive];
+            self.statusIcon = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"status_red" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(incidentListItemStatusIconLeft, 34, statusIconDimension, statusIconDimension)];
+        }else if([self.incident.status isEqual:@"finished"]){
+            [self.btnAccept removeFromSuperview];
+            [self.btnDeny removeFromSuperview];
+            self.statusIcon = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"status_grey" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(incidentListItemStatusIconLeft, 34, statusIconDimension, statusIconDimension)];
+        }
+        [self addSubview:self.statusIcon];
+        
         //ARROW RIGHT
-        self.arrowRight = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"icon_arrow_right" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(300, 32, 4, 14)];
+        self.arrowRight = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"icon_arrow_right_small" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/",imageDir]] andFrame:CGRectMake(300, 32, 4, 14)];
         [self addSubview:self.arrowRight];
     }
     return self;
+}
+
+-(void)tappedToggle:(id)sender{
+    ToggleButton *currentToggle = (ToggleButton*)sender;
+    if(!currentToggle.isActive){
+        [currentToggle setActive];
+        if(currentToggle == self.btnAccept){
+            [self.btnDeny setInactive];
+            self.incident.status = @"active";
+        }else{
+            [self.btnAccept setInactive];
+            self.incident.status = @"denied";
+        }
+        [self updateData];
+    }
+}
+
+-(void)updateData{
+    for(int i=0; i<[arrIncidents count]; i++){
+        Incident *dataObj = (Incident*)arrIncidents[i];
+        if(dataObj.incidentId == self.incident.incidentId){
+            arrIncidents[i] = self.incident;
+        }
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UPDATE_SEGMENTED_CONTROL" object:nil];
 }
 
 -(NSString*)calculateDateDifference:(NSString*)date{

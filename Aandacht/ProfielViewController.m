@@ -25,8 +25,22 @@
         NSString *path = [[NSBundle mainBundle] pathForResource:@"nav_profiel" ofType:@"png" inDirectory:navDir];
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title image:image tag:2];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showImagePicker:) name:@"EDIT_PROFILE_PICTURE" object:nil];
     }
     return self;
+}
+
+-(void)showImagePicker:(id)sender{
+    UIImagePickerController *pickerLibrary = [[UIImagePickerController alloc] init];
+    pickerLibrary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    pickerLibrary.delegate = self;
+    [self presentViewController:pickerLibrary animated:YES completion:NULL];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self.profielV.profilePictureV updateProfilePictureWithImage:image];
+    [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)viewDidLoad

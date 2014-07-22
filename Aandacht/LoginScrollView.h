@@ -25,4 +25,6 @@
 @property(nonatomic) CGSize ownContentSize;
 @property(nonatomic) BOOL allowScrollControl;
 
+-(void)animateObjects;
+
 @end

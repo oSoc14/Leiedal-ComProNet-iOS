@@ -12,6 +12,7 @@
 @implementation SwitchView
 
 @synthesize lblTitle = _lblTitle;
+@synthesize btnSwitch = _btnSwitch;
 
 - (id)initWithFrame:(CGRect)frame andTitle:(NSString*)title
 {
@@ -25,8 +26,9 @@
         self.lblTitle = [Constants createLabel:title andFrame:CGRectMake(16, 14, [[UIScreen mainScreen] bounds].size.width, 14) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentLeft andTextColor:[UIColor colorWithRed:(41/255.0) green:(98/255.0) blue:(149/255.0) alpha:1] andFont:[UIFont fontWithName:@"HelveticaNeue" size:17]];
         [self addSubview:self.lblTitle];
         
-        UISwitch *btnSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(253, 5, 50, 32)];
-        [self addSubview:btnSwitch];
+        self.btnSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(253, 5, 50, 32)];
+        [self addSubview:self.btnSwitch];
+        
     }
     return self;
 }

@@ -12,9 +12,11 @@
 
 @property(strong, nonatomic) UIColor *blue;
 @property(strong, nonatomic) NSString *imgDir;
+@property(strong, nonatomic) UIImage *imageMask;
 @property(strong, nonatomic) UIImageView *profilePicture;
 @property(strong, nonatomic) UIButton *btnEditImage;
 
 - (id)initWithFrame:(CGRect)frame andImgDir:(NSString*)imgDir;
+-(void)updateProfilePictureWithImage:(UIImage*)image;
 
 @end

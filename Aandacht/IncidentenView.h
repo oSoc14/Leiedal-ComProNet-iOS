@@ -22,6 +22,8 @@
 @property(strong, nonatomic) NSArray *arrIncidentenList;
 @property(strong, nonatomic) IncidentenListScrollView *incidentenListScrollV;
 
+-(void)fadeInElements;
 -(void)updateIncidentsList:(NSArray*)incidentsList;
+-(void)updateFilter;
 
 @end

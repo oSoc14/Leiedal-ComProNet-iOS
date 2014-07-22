@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ProfielView.h"
 
-@interface ProfielViewController : UIViewController
+@interface ProfielViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property(strong, nonatomic) ProfielView *profielV;
 

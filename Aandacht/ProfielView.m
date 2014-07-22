@@ -16,6 +16,7 @@
 @synthesize headerV = _headerV;
 @synthesize loggedInStatusV = _loggedInStatusV;
 @synthesize profilePictureV = _profilePictureV;
+@synthesize statsV = _statsV;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -34,9 +35,12 @@
         [self addSubview:self.loggedInStatusV];
         
         //PROFILE PICTURE
-        self.profilePictureV = [[ProfilePictureView alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - defaultContentWidth, self.loggedInStatusV.frame.origin.y + self.loggedInStatusV.frame.size.height + 16, defaultContentWidth, 148) andImgDir:self.imgDir];
-        
+        self.profilePictureV = [[ProfilePictureView alloc] initWithFrame:CGRectMake(0, self.loggedInStatusV.frame.origin.y + self.loggedInStatusV.frame.size.height + 16, defaultContentWidth, 148) andImgDir:self.imgDir];
         [self addSubview:self.profilePictureV];
+        
+        //STATSVIEW
+        self.statsV = [[StatsView alloc] initWithFrame:CGRectMake(0, self.profilePictureV.frame.origin.y + self.profilePictureV.frame.size.height + 20, [[UIScreen mainScreen] bounds].size.width, 244)];
+        [self addSubview:self.statsV];
     }
     return self;
 }

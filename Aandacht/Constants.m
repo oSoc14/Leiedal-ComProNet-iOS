@@ -14,12 +14,20 @@
 NSString * const userName = @"Bastiaan";
 //decoded password = test12
 NSString * const userPass = @"4ff1a33e188b7b86123d6e3be2722a23514a83b4";
+bool isUserActive = true;
+NSArray *arrUserMetaData;
 NSMutableArray *arrIncidents;
 NSMutableArray *arrSelectedIncidents;
+Incident * currentSelectedIncident;
 
 NSString * const imageDir = @"images/";
 NSString * const navDir = @"images/nav";
 NSString * const timeZone = @"+0001";
+
+NSString * const pathAcceptedActive = @"button_confirm_active";
+NSString * const pathAcceptedInactive = @"button_confirm_inactive";
+NSString * const pathDeniedActive = @"button_deny_active";
+NSString * const pathDeniedInactive = @"button_deny_inactive";
 
 UIColor * defaultGrayBackgroundColor;
 UIColor * headerBackgroundColor;
@@ -35,10 +43,11 @@ float const defaultContentWidth = 288;
 float const animationHeightDiff = 20;
 float const loginInputHeight = 40;
 float const incidentListItemViewHeight = 75;
-float const incidentListItemStatusIconLeft = 26;
+float const incidentListItemStatusIconLeft = 23;
 float const incidentListItemTextLeft = 44;
 float const incidentListItemTextWidth = 190;
 float const settingsItemHeight = 42;
+float const toggleButtonDimension = 22;
 
 NSDateFormatter *dateFormat;
 int const second = 1;
@@ -48,6 +57,10 @@ int const day = 60*60*24;
 int const week = 60*60*24*7;
 
 +(void)setConstants{
+    arrUserMetaData = [[NSArray alloc] initWithObjects:
+                       [[NSMutableDictionary alloc] initWithObjects:[[NSArray alloc] initWithObjects:@"profiel_stats1", @"8607600", @"icon_total_time_active", NSLocalizedString(@"date_hours", @""), nil] forKeys:[[NSArray alloc] initWithObjects:@"name", @"time", @"src", @"unit", nil]],
+                       [[NSMutableDictionary alloc] initWithObjects:[[NSArray alloc] initWithObjects:@"profiel_stats2", @"41", @"icon_average_respons_time", NSLocalizedString(@"date_seconds", @""), nil] forKeys:[[NSArray alloc] initWithObjects:@"name", @"time", @"src", @"unit", nil]], nil];
+    
     defaultDarkGrayBorder = [UIColor colorWithRed:(230/255.0) green:(230/255.0) blue:(231/255.0) alpha:1];
     headerBackgroundColor = [UIColor colorWithRed:(246/255.0) green:(246/255.0) blue:(246/255.0) alpha:1];
     defaultLightGrayBorder = [UIColor colorWithRed:(178/255.0) green:(178/255.0) blue:(178/255.0) alpha:1];
@@ -164,7 +177,7 @@ int const week = 60*60*24*7;
     dateDurationTimeStamp1 = [dateDurationTimeStamp1 dateByAddingTimeInterval:hour-minute];
     NSString *durationTimeStamp1 = [dateFormat stringFromDate:dateDurationTimeStamp1];
     
-    Incident *incident1 = [[Incident alloc] initWithId:0 andAddress:@"Nieuwstraat 25" andDescription:@"Er staan enkele personen op het dak van het wijkcentrum. Verdachte activiteiten gespot!" andLatitude:50.825114 andLongitude:3.269480 andTimeStamp:timeStamp1 andDurationTimeStamp:durationTimeStamp1 andStatus:@"pending"];
+    Incident *incident1 = [[Incident alloc] initWithId:0 andAddress:@"Nieuwstraat 25" andCity:@"8500 Kortrijk" andDescription:@"Er staan enkele personen op het dak van het wijkcentrum. Verdachte activiteiten gespot!" andLatitude:50.825114 andLongitude:3.269480 andTimeStamp:timeStamp1 andDurationTimeStamp:durationTimeStamp1 andStatus:@"pending"];
     
     //incident2
     NSDate *dateTimeStamp2 = [dateFormat dateFromString:now];
@@ -175,7 +188,7 @@ int const week = 60*60*24*7;
     dateDurationTimeStamp2 = [dateDurationTimeStamp2 dateByAddingTimeInterval:(4*hour)-(5*minute)];
     NSString *durationTimeStamp2 = [dateFormat stringFromDate:dateDurationTimeStamp2];
     
-    Incident *incident2 = [[Incident alloc] initWithId:0 andAddress:@"Doorniksestraat 129" andDescription:@"Kind verloren ter hoogte van de bloemenwinkel. Het kind heet Waldo Verstraete en draagt een blauwe jeansbroek met een geruite trui in wit en rood. Verder draagt hij ook een wit en rood streepte muts. Mogelijks is hij richting het centrum gelopen." andLatitude:50.824630 andLongitude:3.268462 andTimeStamp:timeStamp2 andDurationTimeStamp:durationTimeStamp2 andStatus:@"active"];
+    Incident *incident2 = [[Incident alloc] initWithId:1 andAddress:@"Doorniksestraat 129" andCity:@"8500 Kortrijk" andDescription:@"Kind verloren ter hoogte van de bloemenwinkel. Het kind heet Waldo Verstraete en draagt een blauwe jeansbroek met een geruite trui in wit en rood. Verder draagt hij ook een wit en rood streepte muts. Mogelijks is hij richting het centrum gelopen." andLatitude:50.824630 andLongitude:3.268462 andTimeStamp:timeStamp2 andDurationTimeStamp:durationTimeStamp2 andStatus:@"active"];
     
     //incident3
     NSDate *dateTimeStamp3 = [dateFormat dateFromString:now];
@@ -186,7 +199,7 @@ int const week = 60*60*24*7;
     dateDurationTimeStamp3 = [dateDurationTimeStamp3 dateByAddingTimeInterval:(5*hour)-(7*minute)];
     NSString *durationTimeStamp3 = [dateFormat stringFromDate:dateDurationTimeStamp3];
     
-    Incident *incident3 = [[Incident alloc] initWithId:0 andAddress:@"Sint-Jorisstraat 50" andDescription:@"3 auto’s betrokken in een auto ongeval. Geen zwaargewonden, wel paniek en veel blikschade" andLatitude:50.824953 andLongitude:3.266721 andTimeStamp:timeStamp3 andDurationTimeStamp:durationTimeStamp3 andStatus:@"denied"];
+    Incident *incident3 = [[Incident alloc] initWithId:2 andAddress:@"Sint-Jorisstraat 50" andCity:@"8500 Kortrijk" andDescription:@"3 auto’s betrokken in een auto ongeval. Geen zwaargewonden, wel paniek en veel blikschade" andLatitude:50.824953 andLongitude:3.266721 andTimeStamp:timeStamp3 andDurationTimeStamp:durationTimeStamp3 andStatus:@"denied"];
     
     //incident4
     NSDate *dateTimeStamp4 = [dateFormat dateFromString:now];
@@ -197,7 +210,7 @@ int const week = 60*60*24*7;
     dateDurationTimeStamp4 = [dateDurationTimeStamp4 dateByAddingTimeInterval:hour-day];
     NSString *durationTimeStamp4 = [dateFormat stringFromDate:dateDurationTimeStamp4];
     
-    Incident *incident4 = [[Incident alloc] initWithId:0 andAddress:@"Zwevegemsestraat 24" andDescription:@"Fietsen worden gestolen aan de fietsensrekken aan de ingang van de ondergrondse parking van de K." andLatitude:3.272042 andLongitude:3.272042 andTimeStamp:timeStamp4 andDurationTimeStamp:durationTimeStamp4 andStatus:@"finished"];
+    Incident *incident4 = [[Incident alloc] initWithId:3 andAddress:@"Zwevegemsestraat 24" andCity:@"8500 Kortrijk" andDescription:@"Fietsen worden gestolen aan de fietsensrekken aan de ingang van de ondergrondse parking van de K." andLatitude:3.272042 andLongitude:3.272042 andTimeStamp:timeStamp4 andDurationTimeStamp:durationTimeStamp4 andStatus:@"finished"];
     
     //incident5
     NSDate *dateTimeStamp5 = [dateFormat dateFromString:now];
@@ -208,7 +221,7 @@ int const week = 60*60*24*7;
     dateDurationTimeStamp5 = [dateDurationTimeStamp5 dateByAddingTimeInterval:(hour*0.5)-day];
     NSString *durationTimeStamp5 = [dateFormat stringFromDate:dateDurationTimeStamp5];
     
-    Incident *incident5 = [[Incident alloc] initWithId:0 andAddress:@"Filip van de Elzaslaan 39" andDescription:@"Diefstal van een handtas ter hoogte van het JOC." andLatitude:50.819478 andLongitude:3.257726 andTimeStamp:timeStamp5 andDurationTimeStamp:durationTimeStamp5 andStatus:@"finished"];
+    Incident *incident5 = [[Incident alloc] initWithId:4 andAddress:@"Filip van de Elzaslaan 39" andCity:@"8500 Kortrijk" andDescription:@"Diefstal van een handtas ter hoogte van het JOC." andLatitude:50.819478 andLongitude:3.257726 andTimeStamp:timeStamp5 andDurationTimeStamp:durationTimeStamp5 andStatus:@"finished"];
     
     arrIncidents = [[NSMutableArray alloc] initWithObjects:incident1, incident2, incident3, incident4, incident5, nil];
 }
@@ -229,6 +242,5 @@ int const week = 60*60*24*7;
     }
     return arrResultIncidents;
 }
-
 
 @end

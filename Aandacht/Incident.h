@@ -13,6 +13,7 @@
 @property(nonatomic) int incidentId;
 
 @property(strong, nonatomic) NSString *address;
+@property(strong, nonatomic) NSString *city;
 @property(strong, nonatomic) NSString *description;
 @property(nonatomic) double latitude;
 @property(nonatomic) double longitude;
@@ -20,6 +21,6 @@
 @property(strong, nonatomic) NSString *durationTimeStamp;
 @property(strong, nonatomic) NSString *status;
 
--(id)initWithId:(int)incidentId andAddress:(NSString*)address andDescription:(NSString*)description andLatitude:(double)latitude andLongitude:(double)longitude andTimeStamp:(NSString*)timeStamp andDurationTimeStamp:(NSString*)durationTimeStamp andStatus:(NSString*)status;
+-(id)initWithId:(int)incidentId andAddress:(NSString*)address andCity:(NSString*)city andDescription:(NSString*)description andLatitude:(double)latitude andLongitude:(double)longitude andTimeStamp:(NSString*)timeStamp andDurationTimeStamp:(NSString*)durationTimeStamp andStatus:(NSString*)status;
 
 @end

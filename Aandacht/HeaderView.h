@@ -14,5 +14,11 @@
 @property(strong, nonatomic) UIImageView *imgLogo;
 @property(strong, nonatomic) UILabel *lblTitle;
 @property(strong, nonatomic) UIButton *btnLogout;
+@property(strong, nonatomic) UIButton *btnBack;
+@property(strong, nonatomic) NSArray *arrSegmentedItems;
+@property(strong, nonatomic) UISegmentedControl *segmentedControl;
+
+-(void)showBackButton;
+-(void)showSegmentedControl;
 
 @end

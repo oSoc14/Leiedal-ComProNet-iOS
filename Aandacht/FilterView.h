@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "IncidentenListScrollView.h"
 
-@interface FilterView : /*UISegmentedControl*/ UIView
+@interface FilterView: UIView
 
 @property(strong, nonatomic) UILabel *lblIncidenten;
 @property(strong, nonatomic) NSArray *arrFilterItems;
 @property(strong, nonatomic) UISegmentedControl *segmentedControl;
+
+-(void)updateSelectedIncidents;
+-(void)updateSegmentedControl;
 
 @end

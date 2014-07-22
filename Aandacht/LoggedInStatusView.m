@@ -35,7 +35,7 @@
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: self.lblStatus.attributedText];
         /*[text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:(16/255.0) green:(135/255.0) blue:(218/255.0) alpha:1.00f] range: NSMakeRange([self.lblStatus.attributedText length]-[username length]-1,[self.lblStatus.attributedText length]-7)];
         [self.lblStatus setAttributedText: text];*/
-        [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:(16/255.0) green:(135/255.0) blue:(218/255.0) alpha:1.00f] range: NSMakeRange(0,38)];
+        /*[text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:(16/255.0) green:(135/255.0) blue:(218/255.0) alpha:1.00f] range: NSMakeRange(0,38)];*/
         //SHOULD FORMAT RANGE TO NSINTEGER
         
         [self addSubview:self.lblStatus];

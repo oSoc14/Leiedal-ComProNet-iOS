@@ -13,6 +13,7 @@
 
 @synthesize blue = _blue;
 @synthesize imgDir = _imgDir;
+@synthesize imageMask = _imageMask;
 @synthesize profilePicture = _profilePicture;
 @synthesize btnEditImage = _btnEditImage;
 
@@ -24,24 +25,32 @@
         self.blue = [UIColor colorWithRed:(16/255.0) green:(135/255.0) blue:(218.0/255) alpha:1];
         self.imgDir = imgDir;
         
-        //PROFILE PICTURE
-        self.profilePicture = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"profile_picture" ofType:@"png" inDirectory:imgDir] andFrame:CGRectMake(80, 0, 86, 86)];
-        //self.profilePicture.layer.borderWidth = 5;
-        //self.profilePicture.layer.borderColor = self.blue.CGColor;
-        [self addSubview:self.profilePicture];
+        //PROFILE PICTURE IMAGE
+        UIImage *imgProfilePicture = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"profile_picture" ofType:@"png" inDirectory:self.imgDir]];
+        [self updateProfilePictureWithImage:imgProfilePicture];
         
         //EDIT IMAGE BUTTON
-        NSLog(@"%f",([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2);
         self.btnEditImage = [Constants createCustomButton:[NSLocalizedString(@"profiel_edit_profile_picture", @"") uppercaseString] andTextColor:[UIColor whiteColor] andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, self.profilePicture.frame.origin.y + self.profilePicture.frame.size.height + 17, defaultContentWidth, 35) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture" ofType:@"png" inDirectory:self.imgDir] andBackgroundHoverImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture_h" ofType:@"png" inDirectory:self.imgDir] andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:22]];
         [self addSubview:self.btnEditImage];
         [self.btnEditImage addTarget:self action:@selector(editImage:) forControlEvents:UIControlEventTouchUpInside];
-        NSLog(@"%f", self.btnEditImage.frame.origin.x);
     }
     return self;
 }
 
+-(void)updateProfilePictureWithImage:(UIImage*)image{
+    [self.profilePicture removeFromSuperview];
+    int profilePictureDimension = 86;
+    
+    //PROFILE PICTURE
+    self.profilePicture = [[UIImageView alloc] initWithImage:image];
+    [self.profilePicture setFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - 86)/2, 0, profilePictureDimension, profilePictureDimension)];
+    self.profilePicture.layer.cornerRadius = 45;
+    self.profilePicture.clipsToBounds = YES;
+    [self addSubview:self.profilePicture];
+}
+
 -(void)editImage:(id)sender{
-    NSLog(@"[ProfilePictureView] edit image");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"EDIT_PROFILE_PICTURE" object:nil];
 }
 
 /*

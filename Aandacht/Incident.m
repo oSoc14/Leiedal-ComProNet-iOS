@@ -13,6 +13,7 @@
 @synthesize incidentId = _incidentId;
 
 @synthesize address = _address;
+@synthesize city = _city;
 @synthesize description = _description;
 @synthesize latitude = _latitude;
 @synthesize longitude = _longitude;
@@ -20,13 +21,14 @@
 @synthesize durationTimeStamp = _durationTimeStamp;
 @synthesize status = _status;
 
--(id)initWithId:(int)incidentId andAddress:(NSString*)address andDescription:(NSString*)description andLatitude:(double)latitude andLongitude:(double)longitude andTimeStamp:(NSString*)timeStamp andDurationTimeStamp:(NSString*)durationTimeStamp andStatus:(NSString*)status{
+-(id)initWithId:(int)incidentId andAddress:(NSString*)address andCity:(NSString*)city andDescription:(NSString*)description andLatitude:(double)latitude andLongitude:(double)longitude andTimeStamp:(NSString*)timeStamp andDurationTimeStamp:(NSString*)durationTimeStamp andStatus:(NSString*)status{
     self = [super init];
     
     if(self){
         self.incidentId = incidentId;
         
         self.address = address;
+        self.city = city;
         self.description = description;
         self.latitude = latitude;
         self.longitude = longitude;

@@ -42,7 +42,6 @@
         
         //LIGHT STAR
         self.lightStar = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"light_star" ofType:@"png" inDirectory:self.imageDir] andFrame:CGRectMake(0, -95, [[UIScreen mainScreen] bounds].size.width, 506)];
-        [self.lightStar setAlpha:0];
         [self.arrAnimatedObjects addObject:self.lightStar];
         [self addSubview:self.lightStar];
         
@@ -67,60 +66,65 @@
         [self addSubview:self.logoImageV];
         
         //TITLE LABEL
-        self.lblTitel = [Constants createLabel:[NSLocalizedString(@"app_title", @"") uppercaseString] andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - 130.5)/2, 228 - animationHeightDiff, 132, 20) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentCenter andTextColor:[UIColor whiteColor] andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:24]];
-        [self.lblTitel setAlpha:0];
+        self.lblTitel = [Constants createLabel:[NSLocalizedString(@"app_title", @"") uppercaseString] andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - 130.5)/2, 228, 132, 20) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentCenter andTextColor:[UIColor whiteColor] andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:24]];
         [self.arrAnimatedObjects addObject:self.lblTitel];
         [self addSubview:self.lblTitel];
         
         //TEXTFIELD USERNAME
-        self.txtUserName = [Constants createTextField:NSLocalizedString(@"login_username_placeholder", @"") andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, 339 - animationHeightDiff, defaultContentWidth, loginInputHeight) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"input_username_bg" ofType:@"png" inDirectory:self.imageDir] andTextAlignment:NSTextAlignmentCenter andTextColor:inputTextColor andFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]
+        self.txtUserName = [Constants createTextField:NSLocalizedString(@"login_username_placeholder", @"") andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, 339, defaultContentWidth, loginInputHeight) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"input_username_bg" ofType:@"png" inDirectory:self.imageDir] andTextAlignment:NSTextAlignmentCenter andTextColor:inputTextColor andFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]
             andPlaceHolderColor:inputPlaceHolderColor];
         self.txtUserName.delegate = self;
         self.txtUserName.autocorrectionType = UITextAutocorrectionTypeNo;
-        [self.txtUserName setAlpha:0];
         [self.arrAnimatedObjects addObject:self.txtUserName];
         [self addSubview:self.txtUserName];
         
         //TEXTFIELD PASSWORD
-        self.txtPassWord = [Constants createTextField:NSLocalizedString(@"login_password_placeholder", @"") andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, 380 - animationHeightDiff, defaultContentWidth, loginInputHeight) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"input_password_bg" ofType:@"png" inDirectory:self.imageDir] andTextAlignment:NSTextAlignmentCenter andTextColor:inputTextColor andFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17] andPlaceHolderColor:inputPlaceHolderColor];
+        self.txtPassWord = [Constants createTextField:NSLocalizedString(@"login_password_placeholder", @"") andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, 380, defaultContentWidth, loginInputHeight) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"input_password_bg" ofType:@"png" inDirectory:self.imageDir] andTextAlignment:NSTextAlignmentCenter andTextColor:inputTextColor andFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17] andPlaceHolderColor:inputPlaceHolderColor];
         self.txtPassWord.delegate = self;
         self.txtPassWord.secureTextEntry = YES;
-        [self.txtPassWord setAlpha:0];
         [self.arrAnimatedObjects addObject:self.txtPassWord];
         [self addSubview:self.txtPassWord];
         
         //LOGIN BUTTON
-        self.btnLogin = [Constants createCustomButton:[NSLocalizedString(@"login_submit_button", @"") uppercaseString] andTextColor:[UIColor colorWithRed:(24/255.0) green:(76/255.0) blue:(122/255.0) alpha:1] andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, 435 - animationHeightDiff, defaultContentWidth, loginInputHeight) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"input_login_bg" ofType:@"png" inDirectory:self.imageDir] andBackgroundHoverImagePath:[[NSBundle mainBundle] pathForResource:@"input_login_bg_h" ofType:@"png" inDirectory:self.imageDir] andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:21]];
-        [self.btnLogin setAlpha:0];
+        self.btnLogin = [Constants createCustomButton:[NSLocalizedString(@"login_submit_button", @"") uppercaseString] andTextColor:[UIColor colorWithRed:(24/255.0) green:(76/255.0) blue:(122/255.0) alpha:1] andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, 435, defaultContentWidth, loginInputHeight) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"input_login_bg" ofType:@"png" inDirectory:self.imageDir] andBackgroundHoverImagePath:[[NSBundle mainBundle] pathForResource:@"input_login_bg_h" ofType:@"png" inDirectory:self.imageDir] andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:21]];
         [self.arrAnimatedObjects addObject:self.btnLogin];
         [self addSubview:self.btnLogin];
         
         //set initial content size
         self.contentSize = CGSizeMake(self.ownContentSize.width, [[UIScreen mainScreen] bounds].size.height);
         
-        //initial fadein
-        float i = 0;
-        for (UIView *object in self.arrAnimatedObjects) {
-            float delay = i*0.2;
-            if(object == self.txtPassWord || object == self.btnLogin){
-                delay = (i-1)*0.2;
-            }
-            [UIView animateWithDuration:0.4 delay:delay options:UIViewAnimationOptionLayoutSubviews animations:^{
-                object.alpha = 1;
-                if(object == self.lightStar){
-                    object.alpha = 0.7;
-                }
-                object.frame = CGRectMake(object.frame.origin.x, object.frame.origin.y + animationHeightDiff, object.frame.size.width, object.frame.size.height);
-            } completion:^(BOOL finished){
-                if(object == self.btnLogin){
-                    [self.btnLogin addTarget:self action:@selector(loginUser:) forControlEvents:UIControlEventTouchUpInside];
-                }
-            }];
-            i++;
-        }
+        //TEMPORARY - FILL FORM
+        [self.txtUserName setText:@"Bastiaan"];
+        [self.txtPassWord setText:@"test12"];
         
+        [self animateObjects];
     }
     return self;
+}
+
+-(void)animateObjects{
+    //initial fadein
+    float i = 0;
+    for (UIView *object in self.arrAnimatedObjects) {
+        [object setFrame:CGRectMake(object.frame.origin.x, object.frame.origin.y - animationHeightDiff, object.frame.size.width, object.frame.size.height)];
+        [object setAlpha:0];
+        float delay = i*0.1;
+        if(object == self.txtPassWord || object == self.btnLogin){
+            delay = (i-1)*0.1;
+        }
+        [UIView animateWithDuration:0.7 delay:delay options:UIViewAnimationOptionLayoutSubviews animations:^{
+            object.alpha = 1;
+            if(object == self.lightStar){
+                object.alpha = 0.7;
+            }
+            object.frame = CGRectMake(object.frame.origin.x, object.frame.origin.y + animationHeightDiff, object.frame.size.width, object.frame.size.height);
+        } completion:^(BOOL finished){
+            if(object == self.btnLogin){
+                [self.btnLogin addTarget:self action:@selector(loginUser:) forControlEvents:UIControlEventTouchUpInside];
+            }
+        }];
+        i++;
+    }
 }
 
 -(void)loginUser:(id)sender{

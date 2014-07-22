@@ -7,18 +7,27 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Incident.h"
 
 @interface Constants : NSObject
 
 //CONSTANTS
 extern NSString * const userName;
 extern NSString * const userPass;
+extern bool isUserActive;
+extern NSArray *arrUserMetaData;
 extern NSMutableArray *arrIncidents;
 extern NSMutableArray *arrSelectedIncidents;
+extern Incident * currentSelectedIncident;
 
 extern NSString * const imageDir;
 extern NSString * const navDir;
 extern NSString * const timeZone;
+
+extern NSString * const pathAcceptedActive;
+extern NSString * const pathAcceptedInactive;
+extern NSString * const pathDeniedActive;
+extern NSString * const pathDeniedInactive;
 
 extern UIColor *defaultGrayBackgroundColor;
 extern UIColor *headerBackgroundColor;
@@ -37,6 +46,7 @@ extern float const incidentListItemViewHeight;
 extern float const incidentListItemStatusIconLeft;
 extern float const incidentListItemTextLeft;
 extern float const incidentListItemTextWidth;
+extern float const toggleButtonDimension;
 
 extern float const settingsItemHeight;
 

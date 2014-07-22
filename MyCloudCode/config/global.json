@@ -1,0 +1,11 @@
+{
+    "applications": {
+        "Aandacht!": {
+            "applicationId": "564SNTcghwlpYMIFicb3mIgT3GTyoadlgdf6U3kq", 
+            "masterKey": "VFDmMnmYBoRieSwovT90n4Sh3zviL7BFB5X9oUVG"
+        }, 
+        "_default": {
+            "link": "Aandacht!"
+        }
+    }
+}

@@ -13,20 +13,34 @@
 
 "incidenten_call_button" = "bel 112";
 "incidenten_call_alert" = "Weet u zeker dat u de nooddiensten wil bellen? Misbruik is strafbaar!";
+"incidenten_call_option1" = "Annuleer";
+"incidenten_call_option2" = "Bel";
 "incidenten_filter_title" = "Incidenten";
 "incidenten_filter1" = "Actief";
 "incidenten_filter2" = "Alle";
 "incidenten_filter3" = "Mijn Incidenten";
+"incidenten_none_available" = "Geen incidenten beschikbaar";
+"incidenten_detail_control1" = "Info";
+"incidenten_detail_control2" = "Berichten";
 
 "profiel_logged_in_status" = "U bent momenteel ingelogd als";
 "profiel_edit_profile_picture" = "pas profielfoto aan";
+"profiel_stats_title" = "Stats";
+"profiel_stats1" = "totale tijd (actief)";
+"profiel_stats2" = "gemiddelde respons tijd";
 
 "instellingen_setting1" = "Actief";
 "instellingen_setting1_info" = "Wanneer u actief bent wordt uw locatie bijgehouden en kan u pushberichten ontvangen.";
 "instellingen_setting2" = "Geluid";
 "instellingen_setting2_info" = "Activeer/deactiveer het geluid van pushnotificaties.";
+"instellingen_confirm_inactive" = "Bent u zeker dat u de huidige actieve incidenten wil weigeren?";
+"instellingen_confirm_option1" = "Annuleer";
+"instellingen_confirm_option2" = "Ja";
+"instellingen_send_notification" = "Stuur fictieve pushnotificatie";
+"instellingen_send_notification_info" = "Stuur een fictief incident door vanaf de server. Normaal gezien stuurt de centrale dispatching deze incidenten door. Deze knop dient enkel voor proof-of-concept doeleinden.";
 
 "date_ago" = "geleden";
+"date_seconds" = "seconden";
 "date_minute" = "minuut";
 "date_minutes" = "minuten";
 "date_hour" = "uur";

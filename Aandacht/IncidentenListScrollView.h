@@ -14,6 +14,8 @@
 @property(strong, nonatomic) NSArray *arrIncidents;
 @property(strong, nonatomic) NSMutableArray *arrIncidentListViews;
 @property(strong, nonatomic) Incident *currentSelectedIncident;
+@property(nonatomic) bool isAnimated;
+@property(strong, nonatomic) UILabel *lblNoIncidentsAvailable;
 
 -(void)updateIncidentsList;
 

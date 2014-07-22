@@ -31,6 +31,7 @@
         
         //EVENT LISTENERS
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateIncidentsList:) name:@"UPDATE_SELECTED_INCIDENTS" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSegmentedControl:) name:@"UPDATE_SEGMENTED_CONTROL" object:nil];
         
         //HEADER
         self.headerV = [[HeaderView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 65)];
@@ -62,8 +63,30 @@
     return self;
 }
 
+-(void)fadeInElements{
+    [self.headerV setAlpha:0];
+    [UIView animateWithDuration:0.4 animations:^{
+        self.headerV.alpha = 1;
+    } completion:^(BOOL finished){}];
+    
+    [self.btnCall setAlpha:0];
+    [UIView animateWithDuration:0.4 delay:0.2 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        self.btnCall.alpha = 1;
+    } completion:^(BOOL finished){}];
+    
+    [self.filterV setAlpha:0];
+    [UIView animateWithDuration:0.4 delay:0.4 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        self.filterV.alpha = 1;
+    } completion:^(BOOL finished){}];
+    
+    [self.incidentenListScrollV setAlpha:0];
+    [UIView animateWithDuration:0.4 delay:0.6 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        self.incidentenListScrollV.alpha = 1;
+    } completion:^(BOOL finished){}];
+}
+
 -(void)callEmergencyService:(id)sender{
-    self.confirmCall = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"incidenten_call_alert", @"") message:@"" delegate:self cancelButtonTitle:@"Annuleer" otherButtonTitles:@"Bel", nil];
+    self.confirmCall = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"incidenten_call_alert", @"") message:@"" delegate:self cancelButtonTitle:NSLocalizedString(@"incidenten_call_option1", @"") otherButtonTitles:NSLocalizedString(@"incidenten_call_option2", @""), nil];
     [self.confirmCall show];
 }
 
@@ -74,7 +97,7 @@
         //Confirmed - call
         NSLog(@"Confirmed call: call emergency services");
         
-        NSString *phoneNumber = @"+112";
+        NSString *phoneNumber = @"112";
         NSURL *phoneUrl = [NSURL URLWithString:[NSString  stringWithFormat:@"telprompt:%@",phoneNumber]];
         if([[UIApplication sharedApplication] canOpenURL:phoneUrl]) {
             [[UIApplication sharedApplication] openURL:phoneUrl];
@@ -83,13 +106,22 @@
 }
 
 -(void)updateIncidentsList:(id)sender{
-    NSLog(@"[IncidentenView] updateIncidentsList: %lu", (unsigned long)[arrSelectedIncidents count]);
     [self.incidentenListScrollV updateIncidentsList];
     self.incidentenListScrollV.contentSize = CGSizeMake([[UIScreen mainScreen] bounds].size.width, [arrSelectedIncidents count]*(incidentListItemViewHeight+9));
+}
+-(void)updateSegmentedControl:(id)sender{
+    self.incidentenListScrollV.isAnimated = false;
+    [self.filterV updateSelectedIncidents];
+}
+
+-(void)updateFilter{
+    [self.filterV updateSegmentedControl];
+    [self.incidentenListScrollV updateIncidentsList];
 }
 
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UPDATE_SELECTED_INCIDENTS" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"UPDATE_SEGMENTED_CONTROL" object:nil];
 }
 
 /*

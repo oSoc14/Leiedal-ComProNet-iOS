@@ -27,12 +27,6 @@
         NSString *path = [[NSBundle mainBundle] pathForResource:@"nav_incidenten" ofType:@"png" inDirectory:navDir];
         UIImage *image = [[UIImage alloc] initWithContentsOfFile:path];
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:self.title image:image tag:0];
-        
-        /*self.navCont = [[UINavigationController alloc] init];
-        [self.navCont pushViewController:self.loginVC animated:YES];
-        [self.navCont setNavigationBarHidden:YES animated:NO];*/
-        
-        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ingredientSelected:) name:@"INGREDIENT_SELECTED" object:nil];
     }
     return self;
 }
@@ -54,7 +48,6 @@
     
     self.incidentenV = [[IncidentenView alloc] initWithFrame:frame];
     [self setView:self.incidentenV];
-    //[self loadIncidents];
 }
 
 /*

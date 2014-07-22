@@ -10,6 +10,7 @@
 #import "HeaderView.h"
 #import "LoggedInStatusView.h"
 #import "ProfilePictureView.h"
+#import "StatsView.h"
 
 @interface ProfielView : UIView
 
@@ -18,5 +19,6 @@
 @property(strong, nonatomic) HeaderView *headerV;
 @property(strong, nonatomic) LoggedInStatusView *loggedInStatusV;
 @property(strong, nonatomic) ProfilePictureView *profilePictureV;
+@property(strong, nonatomic) StatsView *statsV;
 
 @end

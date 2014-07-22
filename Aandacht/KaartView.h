@@ -12,6 +12,9 @@
 
 @interface KaartView : UIView <MKMapViewDelegate, CLLocationManagerDelegate>
 
+@property (strong, nonatomic) NSString *imageDir;
+@property (nonatomic) CLLocationCoordinate2D defaultUserLocation;
+
 @property (strong, nonatomic) HeaderView *headerV;
 @property (strong, nonatomic) MKMapView *map;
 @property (strong, nonatomic) CLLocationManager *locationManager;

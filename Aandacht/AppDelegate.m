@@ -9,18 +9,22 @@
 #import "AppDelegate.h"
 #import "Incident.h"
 #import "Constants.h"
+#import <Parse/Parse.h>
 
 @implementation AppDelegate
 
 @synthesize navCont = _navCont;
-@synthesize incidentenNavCont = _incidentenNavCont;
 @synthesize tabbarController = _tabbarController;
+@synthesize incidentenNavCont = _incidentenNavCont;
 
 @synthesize loginVC = _loginVC;
 @synthesize incidentenVC = _incidentenVC;
 @synthesize kaartVC = _kaartVC;
 @synthesize profielVC = _profielVC;
 @synthesize instellingenVC = _instellingenVC;
+@synthesize incidentDetailVC = _incidentDetailVC;
+
+@synthesize subscribedToNotifications = _subscribedToNotifications;
 
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
@@ -29,22 +33,24 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.subscribedToNotifications = false;
+    
+    //setup Parse Framework keys
+    [Parse setApplicationId:@"564SNTcghwlpYMIFicb3mIgT3GTyoadlgdf6U3kq" clientKey:@"wsxlBr2VKrQ3PcVFR2fAnaw1MIAZA9CHrVpOw6oF"];
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound];
+    
+    //Extract the notification data
+    NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+    NSLog(@"%@", notificationPayload);
     
     //set constant vars
     [Constants setConstants];
     
     //event listeners
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showIncidents:) name:@"USER_LOGGED_IN" object:nil];
-
-    //create initial view
-    self.loginVC = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
-    self.navCont = [[UINavigationController alloc] init];
-    [self.navCont pushViewController:self.loginVC animated:YES];
-    [self.navCont setNavigationBarHidden:YES animated:NO];
-    [self.window setRootViewController:self.navCont];
     
-    //TEMPORARY SET TO WORK VIEW
-    [self showIncidents:NULL];
+    //load initial view
+    [self loadInitialView:NULL];
     
     //set background color status bar
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7)
@@ -63,8 +69,6 @@
             self.window.bounds = CGRectMake(0, 20, self.window.frame.size.width, self.window.frame.size.height);
         }
     }
-    
-    //[self readDataFromFile];
     
     self.window.backgroundColor = [UIColor colorWithRed:(247/255.0) green:(247/255.0) blue:247 alpha:1];
     [self.window makeKeyAndVisible];
@@ -93,10 +97,13 @@
 }
 
 //NAVIGATION
--(void)showIncidents:(id)sender{
+-(void)loadInitialView:(id)sender{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"USER_LOGGED_IN" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showLogin:) name:@"USER_LOGOUT" object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendPushNotification:) name:@"SEND_PUSH_NOTIFICATION" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showIncidents:) name:@"USER_LOGGED_IN" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showIncidentDetail:) name:@"TAPPED_INCIDENT" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showIncidentDetail:) name:@"SHOW_TABBAR" object:nil];
+
     self.incidentenVC = [[IncidentenViewController alloc] initWithNibName:nil bundle:nil];
     self.kaartVC = [[KaartViewController alloc] initWithNibName:nil bundle:nil];
     self.profielVC = [[ProfielViewController alloc] initWithNibName:nil bundle:nil];
@@ -113,20 +120,89 @@
     if ([self.tabbarController.tabBar respondsToSelector:@selector(setTintColor:)]) {
         [self.tabbarController.tabBar setTintColor:[UIColor colorWithRed:(0/255.0) green:(122/255.0) blue:(255/255.0) alpha:1]];
     }
-    [self.tabbarController setViewControllers:viewControllers animated:YES];
+    self.tabbarController.delegate = self;
+    [self.tabbarController setViewControllers:viewControllers animated:NO];
     
-    [self.navCont pushViewController:self.tabbarController animated:YES];
+    self.loginVC = [[LoginViewController alloc] initWithNibName:nil bundle:nil];
+    [self.window setRootViewController:self.loginVC];
+}
+
+-(void)sendPushNotification:(id)sender{
+    NSLog(@"[AppDelegate] sendPushNotification");
+    if(!self.subscribedToNotifications){
+        self.subscribedToNotifications = true;
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        [currentInstallation addUniqueObject:@"Incidents" forKey:@"channels"];
+        [currentInstallation saveInBackground];
+    }
+
+    
+    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys: @"Ricky Vaughn was injured in last night's game!", @"alert", @"Vaughn", @"name", @"Man bites dog", @"newsItem", nil];
+    PFPush *push = [[PFPush alloc] init];
+    [push setChannels:[NSArray arrayWithObjects:@"Incidents", nil]];
+    [push setMessage:@"We hebben u gespot in de buurt van een incident. Wilt u het incident in de Doorniksestraat opvolgen en u zich naar daar begeven?"];
+    [push setData:data];
+    [push sendPushInBackground];
+}
+
+//catch tab change
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    if([viewController.title isEqualToString:NSLocalizedString(@"nav_incidenten", @"")]){
+        NSLog(@"[AppDelegate] update filter");
+        [self.incidentenVC.incidentenV updateFilter];
+    }
+}
+
+-(void)showIncidents:(id)sender{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showLogin:) name:@"USER_LOGOUT" object:nil];
+    NSLog(@"[AppDelegate] showIncidents");
+    [self.window setRootViewController:self.tabbarController];
+    [self.incidentenVC.incidentenV fadeInElements];
 }
 
 -(void)showLogin:(id)sender{
+    NSLog(@"[AppDelegate] showLogin");
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"username"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showIncidents:) name:@"USER_LOGGED_IN" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"USER_LOGOUT" object:nil];
+    [self.window setRootViewController:self.loginVC];
+    [self.loginVC.loginScrollV animateObjects];
+}
+
+-(void)showIncidentDetail:(id)sender{
+    NSLog(@"[AppDelegate] showIncidentDetail");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"TAPPED_INCIDENT" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goBackToIncidents:) name:@"GO_BACK_TO_INCIDENTS" object:nil];
     
-    NSLog(@"showLogin");
-    [self.navCont popViewControllerAnimated:YES];
+    self.incidentDetailVC = [[IncidentDetailViewController alloc] initWithNibName:nil bundle:nil];
+    [self.incidentenNavCont pushViewController:self.incidentDetailVC animated:YES];
+}
+
+-(void)goBackToIncidents:(id)sender{
+    NSLog(@"[AppDelegate] goBackToIncidents");
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showIncidentDetail:) name:@"TAPPED_INCIDENT" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"GO_BACK_TO_INCIDENTS" object:nil];
+    
+    [self.incidentenNavCont popViewControllerAnimated:YES];
 }
 
 //APPLICATION CALLBACK METHODS
+
+//push notification
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application
+didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
