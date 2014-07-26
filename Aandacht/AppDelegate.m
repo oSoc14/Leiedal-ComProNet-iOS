@@ -13,6 +13,8 @@
 
 @implementation AppDelegate
 
+@synthesize application = _application;
+@synthesize window = _window;
 @synthesize navCont = _navCont;
 @synthesize tabbarController = _tabbarController;
 @synthesize incidentenNavCont = _incidentenNavCont;
@@ -32,12 +34,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    self.application = application;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.subscribedToNotifications = false;
-    
-    //setup Parse Framework keys
-    [Parse setApplicationId:@"564SNTcghwlpYMIFicb3mIgT3GTyoadlgdf6U3kq" clientKey:@"wsxlBr2VKrQ3PcVFR2fAnaw1MIAZA9CHrVpOw6oF"];
-    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound];
     
     //Extract the notification data
     NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -47,6 +46,8 @@
     [Constants setConstants];
     
     //event listeners
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setParseSettings:) name:@"INTERNET_AVAILABLE" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showInternetAlert:) name:@"NO_INTERNET_AVAILABLE" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showIncidents:) name:@"USER_LOGGED_IN" object:nil];
     
     //load initial view
@@ -96,6 +97,20 @@
 
 }
 
+-(void)setParseSettings:(id)sender{
+    //setup Parse Framework keys
+    [Parse setApplicationId:@"564SNTcghwlpYMIFicb3mIgT3GTyoadlgdf6U3kq" clientKey:@"wsxlBr2VKrQ3PcVFR2fAnaw1MIAZA9CHrVpOw6oF"];
+    [self.application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound];
+    [self showLogin:nil];
+    [self.loginVC.loginScrollV enableForm];
+}
+
+-(void)showInternetAlert:(id)sender{
+    NSLog(@"[AppDelegate] showNoInternetAlert");
+    [self showLogin:nil];
+    [self.loginVC.loginScrollV disableForm];
+}
+
 //NAVIGATION
 -(void)loadInitialView:(id)sender{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"USER_LOGGED_IN" object:nil];
@@ -136,13 +151,41 @@
         [currentInstallation saveInBackground];
     }
 
+    /*Incident *firstIncident = arrPushIncidents[0];
+    [arrPushIncidents removeObjectAtIndex:0];
+    NSString *incidentId = [NSString stringWithFormat:@"%d", firstIncident.incidentId];
+    //TODO: FILL IN OTHER DATA
+    NSString *address = firstIncident.address;
+    NSString *city = firstIncident.city;
+    NSString *description = firstIncident.description;
+    NSString *latitude = [NSString stringWithFormat:@"%f", firstIncident.latitude];
+    NSString *longitude = [NSString stringWithFormat:@"%f", firstIncident.longitude];
     
-    NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys: @"Ricky Vaughn was injured in last night's game!", @"alert", @"Vaughn", @"name", @"Man bites dog", @"newsItem", nil];
+    NSString *now = [dateFormat stringFromDate:[Constants getCurrentDate]];
+    NSString *timeStamp = now;
+    
+    NSDate *dateDurationTimeStamp = [dateFormat dateFromString:now];
+    dateDurationTimeStamp = [dateDurationTimeStamp dateByAddingTimeInterval:hour];
+    NSString *durationTimeStamp = [dateFormat stringFromDate:dateDurationTimeStamp];
+    
+    NSString *status = @"pending";
+    
+    NSDictionary *data = @{
+                           @"alert": description,
+                           @"incidentId": firstIncident,
+                           @"address": address,
+                           @"city": city,
+                           @"description": description,
+                           @"latitude": latitude,
+                           @"longitude": longitude,
+                           @"timeStamp": timeStamp,
+                           @"durationTimeStamp": durationTimeStamp,
+                           @"status": status
+                           };
     PFPush *push = [[PFPush alloc] init];
     [push setChannels:[NSArray arrayWithObjects:@"Incidents", nil]];
-    [push setMessage:@"We hebben u gespot in de buurt van een incident. Wilt u het incident in de Doorniksestraat opvolgen en u zich naar daar begeven?"];
     [push setData:data];
-    [push sendPushInBackground];
+    [push sendPushInBackground];*/
 }
 
 //catch tab change
@@ -159,6 +202,30 @@
     NSLog(@"[AppDelegate] showIncidents");
     [self.window setRootViewController:self.tabbarController];
     [self.incidentenVC.incidentenV fadeInElements];
+    
+    //LOAD USERS DATA
+    [self loadUsersData];
+}
+
+-(void)loadUsersData{
+    NSLog(@"[AppDelegate] loadUsersData");
+    PFQuery *query = [PFQuery queryWithClassName:@"User"];
+    
+    PFQuery *userPoliceData = query;
+    [userPoliceData whereKey:@"name" equalTo:@"Police"];
+    [userPoliceData findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error){
+        for(int i = 0; i<[objects count]; i++){
+            userPolice = objects[i];
+        }
+        
+        PFQuery *userCurrentData = query;
+        [userCurrentData whereKey:@"name" equalTo:userName];
+        [userCurrentData findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error){
+            for(int i = 0; i<[objects count]; i++){
+                userCurrent = objects[i];
+            }
+        }];
+    }];
 }
 
 -(void)showLogin:(id)sender{
@@ -169,6 +236,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"USER_LOGOUT" object:nil];
     [self.window setRootViewController:self.loginVC];
     [self.loginVC.loginScrollV animateObjects];
+    
+    userPolice = nil;
+    userCurrent = nil;
 }
 
 -(void)showIncidentDetail:(id)sender{
@@ -187,19 +257,18 @@
     
     [self.incidentenNavCont popViewControllerAnimated:YES];
 }
-
 //APPLICATION CALLBACK METHODS
-
 //push notification
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     // Store the deviceToken in the current installation and save it to Parse.
+    NSLog(@"didRegisterForRemoteNotificationsWithDeviceToken");
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
     [currentInstallation saveInBackground];
 }
 
-- (void)application:(UIApplication *)application
-didReceiveRemoteNotification:(NSDictionary *)userInfo {
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"didReceiveRemoteNotification withData: %@", userInfo);
     [PFPush handlePush:userInfo];
 }
 
@@ -222,7 +291,14 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo {
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [Parse setApplicationId:@"564SNTcghwlpYMIFicb3mIgT3GTyoadlgdf6U3kq" clientKey:@"wsxlBr2VKrQ3PcVFR2fAnaw1MIAZA9CHrVpOw6oF"];
+    [self.application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound];
+    
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    if (currentInstallation.badge != 0) {
+        currentInstallation.badge = 0;
+        [currentInstallation saveEventually];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

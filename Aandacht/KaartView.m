@@ -25,7 +25,7 @@
     if (self) {
         // Initialization code
         self.imageDir = [[NSString alloc] initWithFormat:@"%@views/kaart/",imageDir];
-        self.defaultUserLocation = CLLocationCoordinate2DMake(50.825457, 3.268784);
+        self.defaultUserLocation = CLLocationCoordinate2DMake(50.825219, 3.268904);
         [self setBackgroundColor:defaultGrayBackgroundColor];
         
         //HEADER
@@ -53,7 +53,7 @@
         //user location
         //MKMapPoint annotationCoordinates = MKMapPointForCoordinate(self.map.userLocation.coordinate);
         
-        MKMapPoint annotationCoordinates = MKMapPointForCoordinate(CLLocationCoordinate2DMake(50.825457, 3.268784));
+        MKMapPoint annotationCoordinates = MKMapPointForCoordinate(CLLocationCoordinate2DMake(50.825219, 3.268904));
         MKPointAnnotation *annotationPoint = [[MKPointAnnotation alloc] init];
         annotationPoint.coordinate = CLLocationCoordinate2DMake(self.defaultUserLocation.latitude, self.defaultUserLocation.longitude);
         annotationPoint.title = @"You";

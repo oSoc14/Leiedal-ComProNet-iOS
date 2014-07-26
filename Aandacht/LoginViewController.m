@@ -28,6 +28,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self testInternetConnection];
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,6 +50,31 @@
     [self.loginScrollV setShowsVerticalScrollIndicator:NO];
     [self setView:self.loginScrollV];
 }
+
+-(void)testInternetConnection
+{
+    internetReachableFoo = [Reachability reachabilityWithHostname:@"www.google.com"];
+    
+    // Internet is reachable
+    //__weak typeof(self) weakSelf = self;
+    internetReachableFoo.reachableBlock = ^(Reachability*reach)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"INTERNET_AVAILABLE" object:nil];
+        });
+    };
+    
+    // Internet is not reachable
+    internetReachableFoo.unreachableBlock = ^(Reachability*reach)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"NO_INTERNET_AVAILABLE" object:nil];
+        });
+    };
+    
+    [internetReachableFoo startNotifier];
+}
+
 
 /*
 #pragma mark - Navigation

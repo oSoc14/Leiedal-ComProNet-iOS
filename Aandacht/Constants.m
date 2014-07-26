@@ -11,11 +11,15 @@
 #import "Incident.h"
 
 @implementation Constants
+NSDictionary * userPolice;
+NSDictionary * userCurrent;
+
 NSString * const userName = @"Bastiaan";
 //decoded password = test12
 NSString * const userPass = @"4ff1a33e188b7b86123d6e3be2722a23514a83b4";
 bool isUserActive = true;
 NSArray *arrUserMetaData;
+NSMutableArray *arrPushIncidents;
 NSMutableArray *arrIncidents;
 NSMutableArray *arrSelectedIncidents;
 Incident * currentSelectedIncident;
@@ -48,6 +52,8 @@ float const incidentListItemTextLeft = 44;
 float const incidentListItemTextWidth = 190;
 float const settingsItemHeight = 42;
 float const toggleButtonDimension = 22;
+float const userIconDimension = 42;
+float const messageTextTopOffset = 7;
 
 NSDateFormatter *dateFormat;
 int const second = 1;
@@ -57,9 +63,18 @@ int const day = 60*60*24;
 int const week = 60*60*24*7;
 
 +(void)setConstants{
+    Incident *incident1 = [[Incident alloc] initWithId:5 andAddress:@"Wijngaardstraat 262" andCity:@"8500 Kortrijk" andDescription:@"In de Bart Smit winkel in de K is er een discussie uit de hand gelopen nadat een klant beweerde op meer korting recht te hebben." andLatitude:50.826202 andLongitude:3.269921 andTimeStamp:0 andDurationTimeStamp:0 andStatus:@"pending"];
+    
+    Incident *incident2 = [[Incident alloc] initWithId:6 andAddress:@"Vlasmarkt 1" andCity:@"8500 Kortrijk" andDescription:@"In een van de cafés op de vlasmarkt, genaamd 'Gainsbar', wil een klant het café niet verlaten ondanks het café wil sluiten. De persoon in kwestie is onder invloed." andLatitude:50.825659 andLongitude:3.267618 andTimeStamp:0 andDurationTimeStamp:0 andStatus:@"pending"];
+    
+    Incident *incident3 = [[Incident alloc] initWithId:7 andAddress:@"Vlamingenstraat 32" andCity:@"8500 Kortrijk" andDescription:@"Een adolescent heeft z'n raam open met veel te luide muziek op." andLatitude:50.825352 andLongitude:3.270232 andTimeStamp:0 andDurationTimeStamp:0 andStatus:@"pending"];
+    
+    arrPushIncidents = [[NSMutableArray alloc] initWithObjects:incident1, incident2, incident3, nil];
+    
     arrUserMetaData = [[NSArray alloc] initWithObjects:
                        [[NSMutableDictionary alloc] initWithObjects:[[NSArray alloc] initWithObjects:@"profiel_stats1", @"8607600", @"icon_total_time_active", NSLocalizedString(@"date_hours", @""), nil] forKeys:[[NSArray alloc] initWithObjects:@"name", @"time", @"src", @"unit", nil]],
                        [[NSMutableDictionary alloc] initWithObjects:[[NSArray alloc] initWithObjects:@"profiel_stats2", @"41", @"icon_average_respons_time", NSLocalizedString(@"date_seconds", @""), nil] forKeys:[[NSArray alloc] initWithObjects:@"name", @"time", @"src", @"unit", nil]], nil];
+    
     
     defaultDarkGrayBorder = [UIColor colorWithRed:(230/255.0) green:(230/255.0) blue:(231/255.0) alpha:1];
     headerBackgroundColor = [UIColor colorWithRed:(246/255.0) green:(246/255.0) blue:(246/255.0) alpha:1];
@@ -143,7 +158,7 @@ int const week = 60*60*24*7;
     NSData *data = [encryptedString dataUsingEncoding:NSUTF8StringEncoding];
     uint8_t digest[CC_SHA1_DIGEST_LENGTH];
     
-    CC_SHA1(data.bytes, data.length, digest);
+    CC_SHA1(data.bytes, (int)data.length, digest);
     
     NSMutableString *output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
     

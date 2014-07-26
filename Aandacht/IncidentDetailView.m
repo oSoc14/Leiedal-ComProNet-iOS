@@ -12,11 +12,12 @@
 @implementation IncidentDetailView
 
 @synthesize headerV = _headerV;
-@synthesize map = _map;
-@synthesize contentContainer = _contentContainer;
-@synthesize lblTitle = _lblTitle;
-@synthesize lblCity = _lblCity;
-@synthesize lblDescription = _lblDescription;
+@synthesize currentShownView = _currentShownView;
+@synthesize incidentenDetailInfoV = _incidentenDetailInfoV;
+@synthesize messagesContainerScrollV = _messagesContainerScrollV;
+@synthesize incidentenDetailMessagesScrollV = _incidentenDetailMessagesScrollV;
+@synthesize messageFormV = _messageFormV;
+@synthesize btnResignTextfield = _btnResignTextfield;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -25,99 +26,115 @@
         // Initialization code
         [self setBackgroundColor:defaultGrayBackgroundColor];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showIncidentInfo:) name:@"SHOW_INCIDENT_INFO" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showIncidentMessages:) name:@"SHOW_INCIDENT_MESSAGES" object:nil];
+        
+        //HEADER
         self.headerV = [[HeaderView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 65)];
         [self.headerV showBackButton];
         [self addSubview:self.headerV];
+        int contentHeight = 413;
         if([currentSelectedIncident.status isEqualToString:@"active"] || [currentSelectedIncident.status isEqualToString:@"pending"]){
             [self.headerV showSegmentedControl];
+            contentHeight = 455;
+            
+            //INCIDENTEN DETAIL MESSAGES
+            self.messagesContainerScrollV = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.headerV.frame.origin.y + self.headerV.frame.size.height, [[UIScreen mainScreen] bounds].size.width, contentHeight)];
+            self.messagesContainerScrollV.delegate = self.incidentenDetailMessagesScrollV;
+            self.messagesContainerScrollV.scrollEnabled = YES;
+            self.messagesContainerScrollV.delaysContentTouches = YES;
+            self.messagesContainerScrollV.canCancelContentTouches = NO;
+            [self.messagesContainerScrollV setShowsHorizontalScrollIndicator:NO];
+            [self.messagesContainerScrollV setShowsVerticalScrollIndicator:NO];
+            
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showMessageForm:) name:@"MESSAGES_LOADED" object:nil];
+            
+            self.incidentenDetailMessagesScrollV = [[IncidentenDetailMessagesScrollView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 369)];
+            self.incidentenDetailMessagesScrollV.delegate = self.incidentenDetailMessagesScrollV;
+            self.incidentenDetailMessagesScrollV.scrollEnabled = YES;
+            self.incidentenDetailMessagesScrollV.delaysContentTouches = YES;
+            self.incidentenDetailMessagesScrollV.canCancelContentTouches = NO;
+            [self.incidentenDetailMessagesScrollV setShowsHorizontalScrollIndicator:NO];
+            [self.incidentenDetailMessagesScrollV setShowsVerticalScrollIndicator:NO];
+            [self.messagesContainerScrollV addSubview:self.incidentenDetailMessagesScrollV];
+            
+            self.btnResignTextfield = [Constants createCustomButton:@"" andTextColor:[UIColor clearColor] andFrame:self.incidentenDetailMessagesScrollV.frame andBackgroundImagePath:@"" andBackgroundHoverImagePath:@"" andFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:17]];
+            [self.btnResignTextfield addTarget:self action:@selector(resignTextfield:) forControlEvents:UIControlEventTouchUpInside];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showNewMessage:) name:@"MESSAGE_SENT" object:nil];
         }
         
-        self.map = [[MKMapView alloc] initWithFrame:frame];
-        self.map.frame = CGRectMake(0, self.headerV.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 115);
-        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(currentSelectedIncident.latitude, currentSelectedIncident.longitude);
-        self.map.region = MKCoordinateRegionMakeWithDistance(coordinate, 500, 500);
-        self.map.showsUserLocation = YES;
-        
-        /*UIImage *mapMarker = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"logo_big" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/kaart/",imageDir]]];
-        MKMapPoint annotationCoordinates = MKMapPointForCoordinate(CLLocationCoordinate2DMake(currentSelectedIncident.latitude, currentSelectedIncident.latitude));*/
-        MKPointAnnotation *annotationPoint = [[MKPointAnnotation alloc] init];
-        annotationPoint.coordinate = CLLocationCoordinate2DMake(currentSelectedIncident.latitude, currentSelectedIncident.longitude);
-        annotationPoint.title = currentSelectedIncident.address;
-        annotationPoint.subtitle = currentSelectedIncident.description;
-        //annotationPoint.image
-        [self.map addAnnotation:annotationPoint];
-        
-        //user location
-        //MKMapPoint annotationCoordinates = MKMapPointForCoordinate(self.map.userLocation.coordinate);
-        
-        MKPointAnnotation *annotationPoint2 = [[MKPointAnnotation alloc] init];
-        annotationPoint2.coordinate = CLLocationCoordinate2DMake(50.825457, 3.268784);
-        annotationPoint2.title = @"You";
-        [self.map addAnnotation:annotationPoint2];
-        
-
-        self.map.delegate = self;
-        [self addSubview:self.map];
-        
-        //CREATE TEXT CONTENT CONTAINER
-        self.contentContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.map.frame.origin.y + self.map.frame.size.height, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height - self.map.frame.origin.y + self.map.frame.size.height)];
-        self.contentContainer.layer.borderColor = defaultDarkGrayBorder.CGColor;
-        self.contentContainer.layer.borderWidth = 1;
-        [self addSubview:self.contentContainer];
-        
-        //TITLE
-        self.lblTitle = [Constants createLabel:[currentSelectedIncident.address uppercaseString] andFrame:CGRectMake(0, 20, [[UIScreen mainScreen] bounds].size.width, 15) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentCenter andTextColor:incidentListItemTextColor andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:20]];
-        [self.contentContainer addSubview:self.lblTitle];
-        
-        //CITY
-        self.lblCity = [Constants createLabel:[currentSelectedIncident.city uppercaseString] andFrame:CGRectMake(0, self.lblTitle.frame.origin.y + self.lblTitle.frame.size.height + 6, [[UIScreen mainScreen] bounds].size.width, 15) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentCenter andTextColor:incidentListItemTextColor andFont:[UIFont fontWithName:@"BrandonGrotesque-Regular" size:9]];
-        [self.contentContainer addSubview:self.lblCity];
-        
-        //DESCRIPTION
-        self.lblDescription = [Constants createLabel:currentSelectedIncident.description andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, self.lblCity.frame.origin.y + self.lblCity.frame.size.height + 20, defaultContentWidth, /*self.contentContainer.frame.size.height - self.lblCity.frame.origin.y - self.lblCity.frame.size.height - 20*/ 1000) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentLeft andTextColor:incidentListItemTextColor andFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
-        self.lblDescription.adjustsFontSizeToFitWidth = NO;
-        self.lblDescription.numberOfLines = 0;
-        [self.lblDescription sizeToFit];
-        
-        /*UIFont *font = self.lblDescription.font;
-        
-        NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        [paragraphStyle setLineSpacing: 10];
-        
-        NSDictionary *attributes = @{ NSFontAttributeName: font, NSParagraphStyleAttributeName: paragraphStyle };
-        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:currentSelectedIncident.description attributes:attributes];
-        
-        [self.lblDescription setAttributedText: attributedString];*/
-        
-        [self.contentContainer addSubview:self.lblDescription];
+        //INCIDENTEN DETAIL INFO
+        self.incidentenDetailInfoV = [[IncidentenDetailInfoView alloc] initWithFrame:CGRectMake(0, self.headerV.frame.origin.y + self.headerV.frame.size.height, [[UIScreen mainScreen] bounds].size.width, contentHeight)];
+        [self addSubview:self.incidentenDetailInfoV];
+        self.currentShownView = self.incidentenDetailInfoV;
     }
     return self;
 }
 
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
-{
-    // If it's the user location, just return nil.
-    if ([annotation isKindOfClass:[MKUserLocation class]])
-        return nil;
+-(void)showNewMessage:(id)sender{
+    [self scrollBackToOriginalPosition:@""];
+    [self.incidentenDetailMessagesScrollV addNewMessage:self.messageFormV.lastSentMessage];
+    self.messageFormV.numMessages++;
+}
+
+-(void)showMessageForm:(id)sender{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToShowSearchForm:) name:@"TEXTFIELD_FOCUS" object:nil];
     
-    // Handle any custom annotations.
-    if ([annotation isKindOfClass:[MKPointAnnotation class]])
-    {
-        // Try to dequeue an existing pin view first.
-        MKAnnotationView *pinView = (MKAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"CustomPinAnnotationView"];
-        if (!pinView)
-        {
-            // If an existing pin view was not available, create one.
-            pinView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"CustomPinAnnotationView"];
-            pinView.canShowCallout = YES;
-            pinView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"marker_default" ofType:@"png" inDirectory:[[NSString alloc] initWithFormat:@"%@views/kaart/", imageDir]]];
-            pinView.calloutOffset = CGPointMake(0, -5);
-        } else {
-            pinView.annotation = annotation;
-        }
-        return pinView;
-    }
-    return nil;
+    self.messageFormV = [[MessageFormView alloc] initWithFrame:CGRectMake(0, self.incidentenDetailMessagesScrollV.frame.origin.y + self.incidentenDetailMessagesScrollV.frame.size.height, [[UIScreen mainScreen] bounds].size.width, 46) andNumMessages:self.incidentenDetailMessagesScrollV.numMessages];
+    [self.messagesContainerScrollV addSubview:self.messageFormV];
+}
+
+-(void)scrollToShowSearchForm:(id)sender{
+    NSLog(@"scrollToShowSearchForm");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"TEXTFIELD_FOCUS" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollBackToOriginalPosition:) name:@"TEXTFIELD_FOCUSOUT" object:nil];
+    [self.messagesContainerScrollV setContentOffset:CGPointMake(0, 167) animated:YES];
+    [self.messagesContainerScrollV addSubview:self.btnResignTextfield];
+}
+
+-(void)scrollBackToOriginalPosition:(id)sender{
+    NSLog(@"scrollToShowSearchForm");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"TEXTFIELD_FOCUSOUT" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToShowSearchForm:) name:@"TEXTFIELD_FOCUS" object:nil];
+    [self.messagesContainerScrollV setContentOffset:CGPointMake(0, 0) animated:YES];
+    [self.btnResignTextfield removeFromSuperview];
+}
+
+-(void)resignTextfield:(id)sender{
+    [self scrollBackToOriginalPosition:nil];
+    [self.messageFormV hideTextField];
+}
+
+-(void)showIncidentInfo:(id)sender{
+    [self switchToView:self.incidentenDetailInfoV];
+}
+
+-(void)showIncidentMessages:(id)sender{
+    [self switchToView:self.messagesContainerScrollV];}
+
+-(void)switchToView:(UIView*)view{
+    [UIView animateWithDuration:0.15 animations:^{
+        self.currentShownView.alpha = 0;
+    } completion:^(BOOL finished){
+        [self.currentShownView removeFromSuperview];
+        
+        [self addSubview:view];
+        [view setAlpha:0];
+        [UIView animateWithDuration:0.15 animations:^{
+            view.alpha = 1;
+        } completion:^(BOOL finished){
+            self.currentShownView = view;
+        }];
+    }];
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SHOW_INCIDENT_INFO" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SHOW_INCIDENT_MESSAGES" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MESSAGES_LOADED" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"TEXTFIELD_FOCUS" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"TEXTFIELD_FOCUSOUT" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MESSAGE_SENT" object:nil];
 }
 
 /*

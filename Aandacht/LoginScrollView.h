@@ -11,6 +11,7 @@
 @interface LoginScrollView : UIScrollView <UIScrollViewDelegate, UITextFieldDelegate>
 
 @property(strong, nonatomic) NSString *imageDir;
+@property(strong, nonatomic) UIAlertView *alert;
 @property(strong, nonatomic) UIImageView *background;
 @property(strong, nonatomic) UIImageView *lightStar;
 
@@ -26,5 +27,7 @@
 @property(nonatomic) BOOL allowScrollControl;
 
 -(void)animateObjects;
+-(void)disableForm;
+-(void)enableForm;
 
 @end

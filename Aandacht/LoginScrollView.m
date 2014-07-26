@@ -12,6 +12,7 @@
 @implementation LoginScrollView
 
 @synthesize imageDir = _imageDir;
+@synthesize alert = _alert;
 @synthesize background = _background;
 @synthesize lightStar = _lightStar;
 
@@ -36,6 +37,9 @@
         self.backgroundColor = [UIColor colorWithRed:(26/255.0) green:(62/255.0) blue:(176/255.0) alpha:1];
         self.arrAnimatedObjects = [[NSMutableArray alloc] init];
         
+        //INTERNET CONNECTION FAILURE ALERT
+        self.alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"alert_no_connection_title", @"") message:NSLocalizedString(@"alert_no_connection_description", @"") delegate:nil cancelButtonTitle:NSLocalizedString(@"alert_no_connection_option", @"") otherButtonTitles:nil];
+        
         //BACKGROUND IMAGE
         self.background = [Constants createImageView:[[NSBundle mainBundle] pathForResource:@"background" ofType:@"png" inDirectory:self.imageDir] andFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 700)];
         [self addSubview:self.background];
@@ -54,7 +58,7 @@
         [rotate setToValue: [NSNumber numberWithFloat: M_PI / 2]];
         rotate.repeatCount = 11;
         
-        rotate.duration = 50/2;
+        rotate.duration = 25/2;
         rotate.beginTime = 0;
         rotate.cumulative = TRUE;
         rotate.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
@@ -128,6 +132,8 @@
 }
 
 -(void)loginUser:(id)sender{
+    [self.lblFeedback removeFromSuperview];
+    
     //set default colors
     self.txtUserName.textColor = inputTextColor;
     self.txtUserName.attributedPlaceholder = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"login_username_placeholder", @"") attributes:@{NSForegroundColorAttributeName: inputPlaceHolderColor}];
@@ -178,7 +184,6 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
     self.allowScrollControl = YES;
-    NSLog(@"textFieldDidBeginEditing");
     self.ownContentSize = self.contentSize;
     self.contentSize = CGSizeMake(self.ownContentSize.width, 5000);
     
@@ -187,7 +192,6 @@
     rc = [textField convertRect:rc toView:v];
     rc.origin.x = 0 ;
     if(textField == self.txtUserName){
-        NSLog(@"tapped username input field");
         rc.origin.y -= 100 ;
     }else if(textField == self.txtPassWord){
         rc.origin.y -= 180 ;
@@ -219,6 +223,39 @@
     } else {
         self.contentOffset = CGPointMake(0, 0);
     }
+}
+
+//DISABLE WHEN OFFLINE, ENABLE WHEN CONNECTED
+-(void)disableForm{
+    [self.alert show];
+    [self.txtUserName setEnabled:NO];
+    [self.txtPassWord setEnabled:NO];
+    [self.lblFeedback removeFromSuperview];
+    self.lblFeedback = [Constants createLabel:NSLocalizedString(@"login_feedback_no_connection", @"") andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, 305, defaultContentWidth, 20) andBackgroundColor:[UIColor clearColor] andAlignment:NSTextAlignmentCenter andTextColor:inputErrorTextColor andFont:[UIFont fontWithName:@"HelveticaNeue-Medium" size:16]];
+    self.lblFeedback.alpha = 0;
+    self.lblFeedback.numberOfLines = 0;
+    self.lblFeedback.frame = CGRectMake(self.lblFeedback.frame.origin.x, self.lblFeedback.frame.origin.y - 25, self.lblFeedback.frame.size.width, self.lblFeedback.frame.size.height + 25);
+    [self addSubview:self.lblFeedback];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.txtUserName.alpha = 0.4;
+        self.txtPassWord.alpha = 0.4;
+        self.lblFeedback.alpha = 1;
+    } completion:nil];
+    [self.btnLogin setEnabled:NO];
+}
+
+-(void)enableForm{
+    [self.alert dismissWithClickedButtonIndex:0 animated:YES];
+    [self.txtUserName setEnabled:YES];
+    [self.txtPassWord setEnabled:YES];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.txtUserName.alpha = 1;
+        self.txtPassWord.alpha = 1;
+        self.lblFeedback.alpha = 0;
+    } completion:^(BOOL finished){
+        [self.lblFeedback removeFromSuperview];
+    }];
+    [self.btnLogin setEnabled:YES];
 }
 
 @end

@@ -54,7 +54,7 @@
     NSLog(@"show user notification options");
     
     //SEND NOTIFICATION BUTTON
-    self.btnSendNotification = [Constants createCustomButton:[NSLocalizedString(@"instellingen_send_notification", @"") uppercaseString] andTextColor:[UIColor whiteColor] andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, self.lblActiveInfo.frame.origin.y + self.lblActiveInfo.frame.size.height, defaultContentWidth, 35) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/profile", imageDir]] andBackgroundHoverImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture_h" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/profile", imageDir]] andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:15]];
+    /*self.btnSendNotification = [Constants createCustomButton:[NSLocalizedString(@"instellingen_send_notification", @"") uppercaseString] andTextColor:[UIColor whiteColor] andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, self.lblActiveInfo.frame.origin.y + self.lblActiveInfo.frame.size.height, defaultContentWidth, 35) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/profile", imageDir]] andBackgroundHoverImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture_h" ofType:@"png" inDirectory:[NSString stringWithFormat:@"%@views/profile", imageDir]] andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:15]];
     [self addSubview:self.btnSendNotification];
     [self.btnSendNotification addTarget:self action:@selector(sendPushNotification:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -77,7 +77,7 @@
     }else{
         self.btnSendNotification.frame = CGRectMake(self.btnSendNotification.frame.origin.x, self.btnSendNotification.frame.origin.y+12, self.btnSendNotification.frame.size.width, self.btnSendNotification.frame.size.height);
         self.lblSendNotification.frame = CGRectMake(self.lblSendNotification.frame.origin.x, self.lblSendNotification.frame.origin.y+16, self.lblSendNotification.frame.size.width, self.lblSendNotification.frame.size.height);
-    }
+    }*/
 }
 
 -(void)fadeOutUserNotificationOptions{
@@ -85,13 +85,13 @@
     [UIView animateWithDuration:0.4 animations:^{
         self.btnSendNotification.alpha = 0;
         self.btnSendNotification.frame = CGRectMake(self.btnSendNotification.frame.origin.x, self.btnSendNotification.frame.origin.y-12, self.btnSendNotification.frame.size.width, self.btnSendNotification.frame.size.height);
-    } completion:^(bool finished){
+    } completion:^(BOOL finished){
         [self.btnSendNotification removeFromSuperview];
     }];
     [UIView animateWithDuration:0.4 delay:0.2 options:UIViewAnimationOptionLayoutSubviews animations:^{
         self.lblSendNotification.alpha = 0;
         self.lblSendNotification.frame = CGRectMake(self.lblSendNotification.frame.origin.x, self.lblSendNotification.frame.origin.y-16, self.lblSendNotification.frame.size.width, self.lblSendNotification.frame.size.height);
-    } completion:^(bool finished){
+    } completion:^(BOOL finished){
         [self.lblSendNotification removeFromSuperview];
     }];
 }

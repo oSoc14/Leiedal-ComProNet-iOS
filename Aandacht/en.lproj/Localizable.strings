@@ -1,5 +1,9 @@
 "app_title" = "Aandacht";
 
+"alert_no_connection_title" = "Geen Netwerkverbinding";
+"alert_no_connection_description" = "Deze app gebruikt een online database die niet toegankelijk is zonder geldige netwerkverbing. Gelieve uw verbinding na te kijken.";
+"alert_no_connection_option" = "Ok";
+
 "nav_incidenten" = "Incidenten";
 "nav_kaart" = "Kaart";
 "nav_profiel" = "Profiel";
@@ -10,6 +14,7 @@
 "login_submit_button" = "Login";
 "login_feedback_empty" = "gelieve alle velden in te vullen";
 "login_feedback_wrong" = "gegevens komen niet overeen";
+"login_feedback_no_connection" = "gelieve verbinding te maken met een geldig netwerk";
 
 "incidenten_call_button" = "bel 112";
 "incidenten_call_alert" = "Weet u zeker dat u de nooddiensten wil bellen? Misbruik is strafbaar!";
@@ -22,6 +27,7 @@
 "incidenten_none_available" = "Geen incidenten beschikbaar";
 "incidenten_detail_control1" = "Info";
 "incidenten_detail_control2" = "Berichten";
+"incidenten_textfield_message_placeholder" = "bericht";
 
 "profiel_logged_in_status" = "U bent momenteel ingelogd als";
 "profiel_edit_profile_picture" = "pas profielfoto aan";

@@ -78,7 +78,17 @@
 }
 
 -(void)changeFilter:(id)sender{
-    NSLog(@"changeFilter");
+    
+    if (self.segmentedControl.selectedSegmentIndex == 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_INCIDENT_INFO" object:nil];
+    }else if(self.segmentedControl.selectedSegmentIndex == 1) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SHOW_INCIDENT_MESSAGES" object:nil];
+    }
+}
+
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SHOW_INCIDENT_INFO" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SHOW_INCIDENT_MESSAGES" object:nil];
 }
 
 /*

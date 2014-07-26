@@ -8,6 +8,7 @@
 
 #import "ProfilePictureView.h"
 #import "Constants.h"
+#import <Parse/Parse.h>
 
 @implementation ProfilePictureView
 
@@ -26,13 +27,20 @@
         self.imgDir = imgDir;
         
         //PROFILE PICTURE IMAGE
-        UIImage *imgProfilePicture = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"profile_picture" ofType:@"png" inDirectory:self.imgDir]];
-        [self updateProfilePictureWithImage:imgProfilePicture];
+        /*UIImage *imgProfilePicture = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"profile_picture" ofType:@"png" inDirectory:self.imgDir]];
+        [self updateProfilePictureWithImage:imgProfilePicture];*/
         
-        //EDIT IMAGE BUTTON
-        self.btnEditImage = [Constants createCustomButton:[NSLocalizedString(@"profiel_edit_profile_picture", @"") uppercaseString] andTextColor:[UIColor whiteColor] andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, self.profilePicture.frame.origin.y + self.profilePicture.frame.size.height + 17, defaultContentWidth, 35) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture" ofType:@"png" inDirectory:self.imgDir] andBackgroundHoverImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture_h" ofType:@"png" inDirectory:self.imgDir] andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:22]];
-        [self addSubview:self.btnEditImage];
-        [self.btnEditImage addTarget:self action:@selector(editImage:) forControlEvents:UIControlEventTouchUpInside];
+        [[userCurrent objectForKey:@"userProfilePic"] getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+            if (!error) {
+                UIImage *image = [UIImage imageWithData:data];
+                [self updateProfilePictureWithImage: image];
+                
+                //EDIT IMAGE BUTTON
+                self.btnEditImage = [Constants createCustomButton:[NSLocalizedString(@"profiel_edit_profile_picture", @"") uppercaseString] andTextColor:[UIColor whiteColor] andFrame:CGRectMake(([[UIScreen mainScreen] bounds].size.width - defaultContentWidth)/2, self.profilePicture.frame.origin.y + self.profilePicture.frame.size.height + 17, defaultContentWidth, 35) andBackgroundImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture" ofType:@"png" inDirectory:self.imgDir] andBackgroundHoverImagePath:[[NSBundle mainBundle] pathForResource:@"edit_profile_picture_h" ofType:@"png" inDirectory:self.imgDir] andFont:[UIFont fontWithName:@"BrandonGrotesque-Black" size:22]];
+                [self addSubview:self.btnEditImage];
+                [self.btnEditImage addTarget:self action:@selector(editImage:) forControlEvents:UIControlEventTouchUpInside];
+            }
+        }];
     }
     return self;
 }
@@ -47,6 +55,22 @@
     self.profilePicture.layer.cornerRadius = 45;
     self.profilePicture.clipsToBounds = YES;
     [self addSubview:self.profilePicture];
+    
+    //UPDATE BACKEND USER
+    //PFQuery *query = [PFQuery queryWithClassName:@"User"];
+    
+    // Retrieve the object by id
+    /*[query whereKey:@"name" equalTo:userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.05f);
+        PFFile *imageFile = [PFFile fileWithName:@"Image.jpg" data:imageData];
+        for(int i = 0; i<[objects count]; i++){
+            PFObject *object = (PFObject*)objects[i];
+            object[@"userProfilePic"] = imageFile;
+            object.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+            [object saveInBackground];
+        }
+    }];*/
 }
 
 -(void)editImage:(id)sender{

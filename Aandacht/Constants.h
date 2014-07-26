@@ -10,12 +10,15 @@
 #import "Incident.h"
 
 @interface Constants : NSObject
-
 //CONSTANTS
+extern NSDictionary * userPolice;
+extern NSDictionary * userCurrent;
+
 extern NSString * const userName;
 extern NSString * const userPass;
 extern bool isUserActive;
 extern NSArray *arrUserMetaData;
+extern NSMutableArray *arrPushIncidents;
 extern NSMutableArray *arrIncidents;
 extern NSMutableArray *arrSelectedIncidents;
 extern Incident * currentSelectedIncident;
@@ -47,8 +50,9 @@ extern float const incidentListItemStatusIconLeft;
 extern float const incidentListItemTextLeft;
 extern float const incidentListItemTextWidth;
 extern float const toggleButtonDimension;
-
 extern float const settingsItemHeight;
+extern float const userIconDimension;
+extern float const messageTextTopOffset;
 
 extern NSDateFormatter *dateFormat;
 extern int const second;

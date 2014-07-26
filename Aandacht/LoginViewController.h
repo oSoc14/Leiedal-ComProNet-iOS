@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "LoginScrollView.h"
+#import "Reachability.h"
 
-@interface LoginViewController : UIViewController
+@interface LoginViewController : UIViewController {
+    Reachability *internetReachableFoo;
+}
+
 
 @property (strong, nonatomic) LoginScrollView *loginScrollV;
 

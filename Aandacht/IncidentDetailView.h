@@ -7,16 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <MapKit/MapKit.h>
 #import "HeaderView.h"
+#import "IncidentenDetailInfoView.h"
+#import "IncidentenDetailMessagesScrollView.h"
+#import "MessageFormView.h"
 
-@interface IncidentDetailView : UIView <MKMapViewDelegate, CLLocationManagerDelegate>
+@interface IncidentDetailView : UIView
 
 @property(strong, nonatomic) HeaderView *headerV;
-@property(strong, nonatomic) MKMapView *map;
-@property(strong, nonatomic) UIView *contentContainer;
-@property(strong, nonatomic) UILabel *lblTitle;
-@property(strong, nonatomic) UILabel *lblCity;
-@property(strong, nonatomic) UILabel *lblDescription;
+@property(strong, nonatomic) UIView *currentShownView;
+@property(strong, nonatomic) IncidentenDetailInfoView *incidentenDetailInfoV;
+@property(strong, nonatomic) UIScrollView *messagesContainerScrollV;
+@property(strong, nonatomic) IncidentenDetailMessagesScrollView *incidentenDetailMessagesScrollV;
+@property(strong, nonatomic) MessageFormView *messageFormV;
+@property(strong, nonatomic) UIButton *btnResignTextfield;
 
 @end
